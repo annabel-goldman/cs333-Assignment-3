@@ -3,8 +3,8 @@
 <meta charset="utf-8">
 <style>
   svg {
-  	width: 400px;
-  	height: 400px;
+  	width: 800px;
+  	height: 800px;
   }
 </style>
 
@@ -21,13 +21,25 @@
     height = +400 - margin.top - margin.bottom
 
   var svg = d3.select("svg") 
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
 
-  d3.csv("data.csv", d => ({
-    launchDate: d["Launch Date"],
-  }))
-  .then(data => {
-    console.log(data)
-    console.log(data[0]);
+  var projection = d3.geoAlbersUsa()
+    .scale(800)
+
+  var path = d3.geoPath()
+    .projection(projection);
+
+  d3.json("map.json")
+  .then(function(us) {
+    svg.selectAll("path")
+      .data(us.features)
+      .enter()
+      .append("path")
+      .attr("d", path)
+      .attr("stroke", "#000000")
+      .attr("fill", "#ffffff")
   })
   .catch(error => {
     console.error("Error loading:", error);
