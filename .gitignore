@@ -94,3 +94,6 @@ venv.bak/
 .venv/
 venv/
 env/
+
+# Ignoring CSV files with our data
+*.csv
