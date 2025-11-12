@@ -31,17 +31,31 @@
   var path = d3.geoPath()
     .projection(projection);
 
+  var statesLayer = svg.append("g").attr("class", "states");
+
   d3.json("map.json")
   .then(function(us) {
-    svg.selectAll("path")
+    statesLayer.selectAll("path")
       .data(us.features)
       .enter()
       .append("path")
       .attr("d", path)
       .attr("stroke", "#000000")
       .attr("fill", "#ffffff")
+      .attr("opacity", 0.7)
   })
-  .catch(error => {
+
+  var crashesLayer = svg.append("g").attr("class", "crashes");
+  d3.json("data.json")
+  .then(function(points) {
+    crashesLayer.selectAll("path")
+      .data(points.features)
+      .enter()
+      .append("path")
+      .attr("d", path)
+      .attr("stroke", "#000000")
+      .attr("fill", "#888888")
+  }).catch(error => {
     console.error("Error loading:", error);
   })
 
