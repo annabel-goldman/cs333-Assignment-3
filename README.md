@@ -16,8 +16,6 @@ Raw Dataset: https://www.kaggle.com/datasets/sobhanmoosavi/us-accidents/data
 Resources for setting up Conda and Pandas to make data cleaning on our large data set possible:
 https://saturncloud.io/blog/how-to-create-a-conda-environment-based-on-a-yaml-file-a-guide-for-data-scientists/
 http://gist.github.com/raeidsaqur/72cc9b4cfff22081ccb34dc8292e3c91
-
-Used to clean the empty cells:
 https://www.w3schools.com/python/pandas/pandas_cleaning_empty_cells.asp
 
 Resources for generating a blank U.S. map in D3:
