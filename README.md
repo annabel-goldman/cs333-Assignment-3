@@ -18,7 +18,6 @@ https://saturncloud.io/blog/how-to-create-a-conda-environment-based-on-a-yaml-fi
 http://gist.github.com/raeidsaqur/72cc9b4cfff22081ccb34dc8292e3c91
 https://www.w3schools.com/python/pandas/pandas_cleaning_empty_cells.asp
 
-
 Resources for generating a blank U.S. map in D3:
 https://billmill.org/making_a_us_map.html
 https://medium.com/@amy.degenaro/introduction-to-digital-cartography-geojson-and-d3-js-c27f066aa84
@@ -28,13 +27,13 @@ https://observablehq.com/@d3/u-s-map
 https://d3js.org/d3-geo/conic
 https://d3js.org/d3-geo/path
 
-Where we got our blank US map geojson
+Blank U.S. Map GeoJson:
 https://eric.clst.org/tech/usgeojson/
 
 Pandas/Numpy Sources
 https://www.w3schools.com/python/pandas/pandas_cleaning_empty_cells.asp
+https://stackoverflow.com/questions/31789160/convert-select-columns-in-pandas-dataframe-to-numpy-array
 https://stackoverflow.com/questions/45577630/print-sample-set-of-columns-from-dataframe-in-pandas
-
 
 ## Contributors
 Annabel Goldman

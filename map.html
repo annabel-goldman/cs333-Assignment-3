@@ -54,7 +54,7 @@
   })
 
   var crashesLayer = svg.append("g").attr("class", "crashes");
-  d3.json("data1.json").then(function(points) {
+  d3.json("data.json").then(function(points) {
     //this is essentially the update step?
     crashesLayer.selectAll("circle")
       .data(points.features)
