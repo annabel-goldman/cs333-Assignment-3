@@ -23,22 +23,30 @@
   var svg = d3.select("svg") 
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
-    .append("g")
 
-  var projection = d3.geoAlbersUsa()
-    .scale(800)
 
-  var path = d3.geoPath()
-    .projection(projection);
+  //projection coverts geojson coords to svg coords
+  var projection = d3.geoAlbersUsa().scale(800)
 
+  //geopath coverts geojson geometry to svg path
+  //projection here is func we use to convert geometry points into svg points
+  var path = d3.geoPath().projection(projection);
+
+  //make group inside of main svg to hold empty map
   var statesLayer = svg.append("g").attr("class", "states");
 
-  d3.json("map.json")
-  .then(function(us) {
+
+  //grab the json file and execute function with resulting data
+  d3.json("map.json").then(function(us) {
+    //inside of the svg layer we made we will select all paths (on first pass this is none)
     statesLayer.selectAll("path")
+      //then we bind the path objects to our features
       .data(us.features)
+      //now we enter the new data
       .enter()
+      //this only matters the first time bc there will be no
       .append("path")
+      //styling for the path
       .attr("d", path)
       .attr("stroke", "#000000")
       .attr("fill", "#ffffff")
@@ -46,15 +54,30 @@
   })
 
   var crashesLayer = svg.append("g").attr("class", "crashes");
-  d3.json("data.json")
-  .then(function(points) {
-    crashesLayer.selectAll("path")
+  d3.json("data1.json").then(function(points) {
+    //this is essentially the update step?
+    crashesLayer.selectAll("circle")
       .data(points.features)
       .enter()
-      .append("path")
-      .attr("d", path)
-      .attr("stroke", "#000000")
+      .append("circle")
+      .attr("cx", d => projection(d.geometry.coordinates)[0])
+      .attr("cy", d => projection(d.geometry.coordinates)[1])
+      .attr("r", 1)
+      .attr("stroke", "#666666")
       .attr("fill", "#888888")
+      .attr("opacity", 0.7)
+      .on("mouseover", function() {
+        d3.select(this)
+          .attr("fill", "red")
+          .attr("stroke", "red")
+          .attr("r", 4)
+      })
+      .on("mouseout", function() {
+        d3.select(this)
+          .attr("stroke", "#666666")
+          .attr("fill", "#888888")
+          .attr("r", 1)
+      });
   }).catch(error => {
     console.error("Error loading:", error);
   })
