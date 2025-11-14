@@ -27,6 +27,14 @@ https://observablehq.com/@d3/u-s-map
 https://d3js.org/d3-geo/conic
 https://d3js.org/d3-geo/path
 
+Blank U.S. Map GeoJson:
+https://eric.clst.org/tech/usgeojson/
+
+Pandas/Numpy Sources
+https://www.w3schools.com/python/pandas/pandas_cleaning_empty_cells.asp
+https://stackoverflow.com/questions/31789160/convert-select-columns-in-pandas-dataframe-to-numpy-array
+https://stackoverflow.com/questions/45577630/print-sample-set-of-columns-from-dataframe-in-pandas
+
 ## Contributors
 Annabel Goldman
 Joanna Soltys
