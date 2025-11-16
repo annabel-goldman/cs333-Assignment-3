@@ -120,24 +120,28 @@
 				updateAndFilterPoints();
 			} else {
 				activeCounty = county;
-				//get bounds of country from the path
-				boundingbox = countyElement.getBBox();
-				const x0 = boundingbox.x;
-				const y0 = boundingbox.y;
-				const y1 = boundingbox.y + boundingbox.height;
-				const x1 = boundingbox.x + boundingbox.width;
 
-				//center point
-				const x = x0 + boundingbox.width / 2;
-				const y = y0 + boundingbox.height / 2;
+				//get center of country from the path
+				const boundingbox = countyElement.getBBox();
+				const centerX = boundingbox.x;
+				const centerY = boundingbox.y;
 
 				//scale the map to the bounding box
 				const scale =
 					1 / Math.max(boundingbox.width / width, boundingbox.height / height);
-				// TODO: make center of the map the center of the bounding box something wrong w this logic?
-				const translate = [width / 2 - scale * x, height / 2 - scale * y];
 
-				const transformString = `translate(${translate}) scale(${scale})`;
+				const translateX = width / 2 - scale * centerX;
+				const translateY = height / 2 - scale * centerY;
+
+				const transformString =
+					'translate(' +
+					translateX +
+					',' +
+					translateY +
+					')' +
+					' scale(' +
+					scale +
+					')';
 
 				statesLayer
 					.transition()
@@ -199,7 +203,6 @@
 				);
 			}
 
-			console.log('active county:' + activeCounty);
 			renderPoints(filteredPoints);
 		}
 
