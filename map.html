@@ -80,10 +80,10 @@
 				console.error('Error loading:', error);
 			});
 
-		//        ------------------------ SET UP  handelrs  --------------------------
+		//        ------------------------ SET UP handlers  --------------------------
 		let activeCounty = null;
 		function countyClicked(event, county) {
-			//this keyword gfrabs the dom element clikced
+			//this keyword grabs the dom element clicked
 			const countyElement = this;
 			//if county is active and the same as the county clicked we zoom out
 			if (activeCounty && activeCounty === county) {
@@ -108,17 +108,16 @@
 				//scale the map to the bounding box
 				const scale =
 					1 / Math.max(boundingbox.width / width, boundingbox.height / height);
-				//make center of the map the cnenter of the bounding box something wrong w this logic?
+				// TODO: make center of the map the center of the bounding box something wrong w this logic?
 				const translate = [width / 2 - scale * x, height / 2 - scale * y];
 
-				const transformString = `
-        translate(${translate})
-        scale(${scale})
-      `;
+				const transformString = `translate(${translate}) scale(${scale})`;
+
 				statesLayer
 					.transition()
 					.duration(750)
 					.attr('transform', transformString);
+
 				crashesLayer
 					.transition()
 					.duration(750)
@@ -133,10 +132,11 @@
 		// function that draws the circles based on a given dataset
 		function renderPoints(data) {
 			crashesLayer
-				//grab all curcles from the svg and bind them to the features (passed in data)
+				//grab all circles from the svg and bind them to the features (passed in data)
 				.selectAll('circle')
 				.data(data)
-				//draw a curcle at the specified coordinates
+
+				//draw a circle at the specified coordinates
 				.join('circle')
 				.attr('cx', (d) => projection(d.geometry.coordinates)[0])
 				.attr('cy', (d) => projection(d.geometry.coordinates)[1])
@@ -181,6 +181,7 @@
 		}
 
 		setupFilter();
+    
 		// connect the dropdown menu to the visualization
 		function setupFilter() {
 			d3.select('#severityFilter').on('change', function () {
