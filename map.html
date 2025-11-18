@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<style>
+  svg {
+  	width: 800px;
+  	height: 800px;
+  }
+</style>
+
+<body>
+  <div id="controls">
+    <label for="severityFilter">Filter by severity:</label>
+    <select id="severityFilter">
+      <option value="all">All</option>
+      <option value="2">Severity 2</option>
+      <option value="4">Severity 4</option>
+    </select>
+  </div>
+  <svg></svg>
+</body>
+
+<script src="http://d3js.org/d3.v6.min.js"></script>
+
+<script>
+
+  var margin = {top: 20, right: 20, bottom: 20, left: 20},
+      width = +400- margin.left - margin.right,
+    height = +400 - margin.top - margin.bottom
+
+  var svg = d3.select("svg") 
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+
+
+  //projection coverts geojson coords to svg coords
+  var projection = d3.geoAlbersUsa().scale(4000).translate([width/20 - 400, height/20 - 400])
+
+  //geopath coverts geojson geometry to svg path
+  //projection here is func we use to convert geometry points into svg points
+  var path = d3.geoPath().projection(projection);
+
+  //make group inside of main svg to hold empty map
+  var statesLayer = svg.append("g").attr("class", "states");
+
+
+  //grab the map json file and execute function with resulting data
+  d3.json("FLmap.json").then(function(us) {
+    //inside of the svg layer we made we will select all paths (on first pass this is none)
+    statesLayer.selectAll("path")
+      //then we bind the path objects to our features
+      .data(us.features)
+      //now we enter the new data
+      .enter()
+      //this only matters the first time bc there will be no
+      .append("path")
+      //styling for the path
+      .attr("d", path)
+      .attr("stroke", "#000000")
+      .attr("fill", "#ffffff")
+      .attr("opacity", 0.7)
+  })
+
+  var allPoints = [];
+
+  var crashesLayer = svg.append("g").attr("class", "crashes");
+  //grab the data json file and execute function with resulting data
+  d3.json("FLdata.json").then(function(points) {
+    //grab the array of features
+    allPoints = points.features
+    renderPoints(allPoints)
+    setupFilter()
+  }).catch(error => {
+    console.error("Error loading:", error);
+  });
+
+  // function that (re)draws the circles based on a given dataset
+  function renderPoints(data) {
+    crashesLayer
+      //grab all curcles from the svg and bind them to the features (passed in data)
+      .selectAll("circle").data(data)
+      //draw a curcle at the specified coordinates
+      .join("circle")
+      .attr("cx", d => projection(d.geometry.coordinates)[0])
+      .attr("cy", d => projection(d.geometry.coordinates)[1])
+      .attr("r", 1)
+      .attr("stroke", "#666666")
+      .attr("fill", "#888888")
+      .attr("opacity", 0.7)
+      .on("mouseover", function() {
+        d3.select(this)
+          .attr("fill", "red")
+          .attr("stroke", "red")
+          .attr("r", 4);
+      })
+      .on("mouseout", function() {
+        d3.select(this)
+          .attr("stroke", "#666666")
+          .attr("fill", "#888888")
+          .attr("r", 1);
+      });
+  }
+
+  // connect the dropdown menu to the visualization
+  function setupFilter() {
+    d3.select("#severityFilter").on("change", function() {
+      var selected = this.value;
+
+      var filtered = selected === "all"
+        ? allPoints
+        : allPoints.filter(d => String(d.properties.severity) === selected);
+
+      renderPoints(filtered);
+    });
+  }
+</script>
+
+</html>
