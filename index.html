@@ -16,6 +16,11 @@
 				<option value="2">Severity 2</option>
 				<option value="4">Severity 4</option>
 			</select>
+			<label for="startTimeSlider"> Filter by start time:</label>
+
+			<input id="startTimeSlider" type="range" min="0" max="23" value="0" />
+			<span id="timeDisplay">12:00 AM</span>
+			<button id="showAllTimesBtn">Show All Times</button>
 		</div>
 		<svg></svg>
 	</body>
@@ -53,6 +58,8 @@
 		let mapFeatures = [];
 		let activeCounty = null;
 		let currentSeverity = 'all';
+		let currentTime = 0;
+		let filterByTime = false;
 
 		// ------------------------ LOAD IN AND PRE-PROCESS DATA ------------------------
 		d3.json('FLmap.json')
@@ -203,6 +210,15 @@
 				);
 			}
 
+			//filter by starttime if filtering enabled
+			if (filterByTime) {
+				filteredPoints = filteredPoints.filter((point) => {
+					const timeString = point.properties.starttime[0];
+					const hour = parseInt(timeString.split(' ')[1].split(':')[0]);
+					return hour === currentTime;
+				});
+			}
+
 			renderPoints(filteredPoints);
 		}
 
@@ -215,6 +231,39 @@
 			});
 		}
 
+		function setupSliders() {
+			d3.select('#startTimeSlider').on('input', function () {
+				currentTime = parseInt(this.value);
+				filterByTime = true;
+
+				let displayHour = currentTime;
+				let period = 'AM';
+
+				if (currentTime === 0) {
+					displayHour = 12;
+				} else if (currentTime === 12) {
+					displayHour = 12;
+					period = 'PM';
+				} else if (currentTime > 12) {
+					displayHour = currentTime - 12;
+					period = 'PM';
+				}
+
+				const displayText = displayHour + ':00 ' + period;
+				d3.select('#timeDisplay').text(displayText);
+				updateAndFilterPoints();
+			});
+		}
+
+		function setupButtons() {
+			d3.select('#showAllTimesBtn').on('click', function () {
+				filterByTime = false;
+				updateAndFilterPoints();
+			});
+		}
+
 		setupFilter();
+		setupSliders();
+		setupButtons();
 	</script>
 </html>
