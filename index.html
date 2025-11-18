@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+	<meta charset="utf-8" />
+	<style>
+		svg {
+			width: 800px;
+			height: 800px;
+		}
+	</style>
+
+	<body>
+		<div id="controls">
+			<label for="severityFilter">Filter by severity:</label>
+			<select id="severityFilter">
+				<option value="all">All</option>
+				<option value="2">Severity 2</option>
+				<option value="4">Severity 4</option>
+			</select>
+			<label for="startTimeSlider"> Filter by start time:</label>
+
+			<input id="startTimeSlider" type="range" min="0" max="23" value="0" />
+			<span id="timeDisplay">12:00 AM</span>
+			<button id="showAllTimesBtn">Show All Times</button>
+		</div>
+		<svg></svg>
+	</body>
+
+	<script src="http://d3js.org/d3.v6.min.js"></script>
+
+	<script>
+		// ------------------------ SET UP canvas --------------------------
+		var margin = { top: 20, right: 20, bottom: 20, left: 20 },
+			width = +400 - margin.left - margin.right,
+			height = +400 - margin.top - margin.bottom;
+
+		var svg = d3
+			.select('svg')
+			.attr('width', width + margin.left + margin.right)
+			.attr('height', height + margin.top + margin.bottom);
+
+		// ------------------------ SET UP MAP LAYER --------------------------
+		//projection coverts geojson coords to svg coords
+		var projection = d3
+			.geoAlbersUsa()
+			.scale(4000)
+			.translate([width / 20 - 400, height / 20 - 400]);
+
+		//geopath coverts geojson geometry to svg path
+		//projection here is func we use to convert geometry points into svg points
+		var path = d3.geoPath().projection(projection);
+
+		var statesLayer = svg.append('g').attr('class', 'states');
+		var crashesLayer = svg.append('g').attr('class', 'crashes');
+
+		// ------------------------ INITIAL STATE OF GLOBAL VARIABLES ------------------------
+
+		let allPoints = [];
+		let mapFeatures = [];
+		let activeCounty = null;
+		let currentSeverity = 'all';
+		let currentTime = 0;
+		let filterByTime = false;
+
+		// ------------------------ LOAD IN AND PRE-PROCESS DATA ------------------------
+		d3.json('FLmap.json')
+			.then(function (us) {
+				mapFeatures = us.features;
+
+				// draw the map first so that users can see something is being loaded in while they wait on the points
+				statesLayer
+					.selectAll('path') //inside of the svg layer we made we will select all paths (on first pass this is none)
+					.data(mapFeatures) //then we bind the path objects to our features
+					.enter()
+					.append('path') //styling for the path
+					.attr('d', path)
+					.attr('stroke', '#000000')
+					.attr('fill', '#ffffff')
+					.attr('opacity', 0.7)
+					.on('click', countyClicked); //new handler for clicking on county
+
+				d3.json('FLdata.json')
+					.then(function (points) {
+						allPoints = points.features;
+
+						// pre-calculate projections for all crash points
+						allPoints.forEach((point) => {
+							// creating a new property for each point so that we can save their projection and render them much faster later
+							point.projected = projection(point.geometry.coordinates);
+
+							// TODO: check if really ok to just assign whatever here
+							// Ensure ID for D3 key function
+							if (!point.properties.id) {
+								point.properties.id = Math.random();
+							}
+						});
+
+						// pre-associate crash points with their counties
+						mapFeatures.forEach((county) => {
+							// creating a new property for each country to hold its points for better performance down the line
+							county.crashPoints = allPoints.filter((point) =>
+								// this way, we only run geoContains (which is an expensive operation) once
+								d3.geoContains(county, point.geometry.coordinates)
+							);
+						});
+
+						// render the points for the first time
+						updateAndFilterPoints();
+					})
+					.catch((error) => {
+						console.log('Error loading in FLdata.json:', error);
+					});
+			})
+			.catch((error) => {
+				console.log('Error loading in FLmap.json:', error);
+			});
+
+		// ------------------------ SET UP handlers  --------------------------
+		function countyClicked(event, county) {
+			//this keyword grabs the dom element clicked
+			const countyElement = this;
+			//if county is active and the same as the county clicked we zoom out
+			if (activeCounty && activeCounty === county) {
+				// zoom out
+				statesLayer.transition().duration(750).attr('transform', '');
+				crashesLayer.transition().duration(750).attr('transform', '');
+				activeCounty = null;
+				updateAndFilterPoints();
+			} else {
+				activeCounty = county;
+
+				//get center of country from the path
+				const boundingbox = countyElement.getBBox();
+				const centerX = boundingbox.x;
+				const centerY = boundingbox.y;
+
+				//scale the map to the bounding box
+				const scale =
+					1 / Math.max(boundingbox.width / width, boundingbox.height / height);
+
+				const translateX = width / 2 - scale * centerX;
+				const translateY = height / 2 - scale * centerY;
+
+				const transformString =
+					'translate(' +
+					translateX +
+					',' +
+					translateY +
+					')' +
+					' scale(' +
+					scale +
+					')';
+
+				statesLayer
+					.transition()
+					.duration(750)
+					.attr('transform', transformString);
+
+				crashesLayer
+					.transition()
+					.duration(750)
+					.attr('transform', transformString);
+
+				updateAndFilterPoints();
+			}
+		}
+
+		//  ------------------------ SET UP  helpers  --------------------------
+
+		// function that draws the circles based on a given dataset
+		function renderPoints(data) {
+			crashesLayer
+				//grab all circles from the svg and bind them to the features (passed in data)
+				.selectAll('circle')
+				.data(data)
+
+				//draw a circle at the specified coordinates
+				.join('circle')
+				.attr('cx', (d) => projection(d.geometry.coordinates)[0])
+				.attr('cy', (d) => projection(d.geometry.coordinates)[1])
+				.attr('r', 1)
+				.attr('stroke', '#666666')
+				.attr('fill', '#888888')
+				.attr('opacity', 0.7)
+				.on('mouseover', function () {
+					d3.select(this)
+						.attr('fill', 'red')
+						.attr('stroke', 'red')
+						.attr('r', 4);
+				})
+				.on('mouseout', function () {
+					d3.select(this)
+						.attr('stroke', '#666666')
+						.attr('fill', '#888888')
+						.attr('r', 1);
+				});
+		}
+
+		function updateAndFilterPoints() {
+			let filteredPoints = allPoints;
+
+			//filter by active county
+			if (activeCounty) {
+				filteredPoints = activeCounty.crashPoints;
+			}
+
+			//filter by severity
+			if (currentSeverity !== 'all') {
+				filteredPoints = filteredPoints.filter(
+					(point) => String(point.properties.severity) === currentSeverity
+				);
+			}
+
+			//filter by starttime if filtering enabled
+			if (filterByTime) {
+				filteredPoints = filteredPoints.filter((point) => {
+					const timeString = point.properties.starttime[0];
+					const hour = parseInt(timeString.split(' ')[1].split(':')[0]);
+					return hour === currentTime;
+				});
+			}
+
+			renderPoints(filteredPoints);
+		}
+
+		// connect the dropdown menu to the visualization
+		function setupFilter() {
+			d3.select('#severityFilter').on('change', function () {
+				currentSeverity = this.value;
+				console.log('current severity:' + currentSeverity);
+				updateAndFilterPoints();
+			});
+		}
+
+		function setupSliders() {
+			d3.select('#startTimeSlider').on('input', function () {
+				currentTime = parseInt(this.value);
+				filterByTime = true;
+
+				let displayHour = currentTime;
+				let period = 'AM';
+
+				if (currentTime === 0) {
+					displayHour = 12;
+				} else if (currentTime === 12) {
+					displayHour = 12;
+					period = 'PM';
+				} else if (currentTime > 12) {
+					displayHour = currentTime - 12;
+					period = 'PM';
+				}
+
+				const displayText = displayHour + ':00 ' + period;
+				d3.select('#timeDisplay').text(displayText);
+				updateAndFilterPoints();
+			});
+		}
+
+		function setupButtons() {
+			d3.select('#showAllTimesBtn').on('click', function () {
+				filterByTime = false;
+				updateAndFilterPoints();
+			});
+		}
+
+		setupFilter();
+		setupSliders();
+		setupButtons();
+	</script>
+</html>
