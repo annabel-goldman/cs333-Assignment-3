@@ -16,6 +16,10 @@
 				<option value="2">Severity 2</option>
 				<option value="4">Severity 4</option>
 			</select>
+		<label for="startTimeSlider"> Filter by start time:</label>
+			<input id="startTimeSlider" type="range" min="0" max="23" value="0">
+			<span id="timeDisplay">12:00 AM</span>
+		<button id="showAllTimesBtn">Show All Times</button>
 		</div>
 		<svg></svg>
 	</body>
@@ -96,20 +100,14 @@
 				activeCounty = county;
 				//get bounds of country from the path
 				boundingbox = countyElement.getBBox();
-				const x0 = boundingbox.x;
-				const y0 = boundingbox.y;
-				const y1 = boundingbox.y + boundingbox.height;
-				const x1 = boundingbox.x + boundingbox.width;
-
-				//center point
-				const x = x0 + boundingbox.width / 2;
-				const y = y0 + boundingbox.height / 2;
+				const centerX = boundingbox.x;
+				const centerY = boundingbox.y;
+				const countyWidth = boundingbox.width
+				const countyHeight = boundingbox.height
 
 				//scale the map to the bounding box
-				const scale =
-					1 / Math.max(boundingbox.width / width, boundingbox.height / height);
-				// TODO: make center of the map the center of the bounding box something wrong w this logic?
-				const translate = [width / 2 - scale * x, height / 2 - scale * y];
+				const scale = 1 / Math.max(countyWidth / width, countyHeight / height);
+				const translate = [width / 2 - scale * centerX, height / 2 - scale * centerY];
 
 				const transformString = `translate(${translate}) scale(${scale})`;
 
@@ -127,9 +125,9 @@
 			}
 		}
 
-		//        ------------------------ SET UP  helpers  --------------------------
+		//        ------------------------ render + update functions  --------------------------
 
-		// function that draws the circles based on a given dataset
+		// helper function that draws the circles based on a given dataset
 		function renderPoints(data) {
 			crashesLayer
 				//grab all circles from the svg and bind them to the features (passed in data)
@@ -144,6 +142,7 @@
 				.attr('stroke', '#666666')
 				.attr('fill', '#888888')
 				.attr('opacity', 0.7)
+				//TODO: change this to be a function that meta info about point 
 				.on('mouseover', function () {
 					d3.select(this)
 						.attr('fill', 'red')
@@ -158,7 +157,11 @@
 				});
 		}
 
+
+		//initial filtering settings
 		let currentSeverity = 'all';
+		let currentTime = 0
+		let filterByTime = false;
 
 		function updateAndFilterPoints() {
 			let filteredPoints = allPoints;
@@ -177,18 +180,63 @@
 				);
 			}
 
+			//filter by starttime if filtering enabled
+			if (filterByTime) {
+				filteredPoints = filteredPoints.filter((point) => {
+					const timeString = point.properties.starttime[0];
+					const hour = parseInt(timeString.split(' ')[1].split(':')[0]);
+					return hour === currentTime;
+				});
+			}
+
 			renderPoints(filteredPoints);
+
 		}
 
-		setupFilter();
-    
-		// connect the dropdown menu to the visualization
-		function setupFilter() {
+		setupFilters();
+		setupSliders();
+		setupButtons()
+		
+		//        ------------------------ Connect Html ui with functions --------------------------
+		function setupFilters() {
 			d3.select('#severityFilter').on('change', function () {
 				currentSeverity = this.value;
 				console.log(currentSeverity);
 				updateAndFilterPoints();
 			});
 		}
+
+		function setupSliders() {
+			d3.select('#startTimeSlider').on('input', function () {
+				currentTime = parseInt(this.value);
+				filterByTime = true; 
+				
+				let displayHour = currentTime;
+				let period = 'AM';
+				
+				if (currentTime === 0) {
+					displayHour = 12;
+				} else if (currentTime === 12) {
+					displayHour = 12;
+					period = 'PM';
+				} else if (currentTime > 12) {
+					displayHour = currentTime - 12;
+					period = 'PM';
+				}
+				
+				const displayText = displayHour + ':00 ' + period;
+				d3.select('#timeDisplay').text(displayText);
+				updateAndFilterPoints();
+			});
+		}
+
+		function setupButtons() {
+			d3.select('#showAllTimesBtn').on('click', function () {
+				filterByTime = false;
+				updateAndFilterPoints();
+			});
+		}
+
+
 	</script>
 </html>

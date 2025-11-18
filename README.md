@@ -52,6 +52,11 @@ For functions that use arrow syntax, this is lexically scoped and may not refer 
 https://www.w3schools.com/howto/howto_css_zoom_hover.asp
 
 
+Slider: 
+https://www.geeksforgeeks.org/html/how-to-add-a-range-slider-using-html/
+
+
+
 Resources for understanding how to add our own data on top of a blank US map:
 https://observablehq.com/@d3/u-s-map 
 https://d3js.org/d3-geo/conic
