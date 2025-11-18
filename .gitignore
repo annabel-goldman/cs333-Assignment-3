@@ -97,4 +97,3 @@ env/
 
 # Ignoring CSV files with our data
 *.csv
-data.json
