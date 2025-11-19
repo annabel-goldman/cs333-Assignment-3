@@ -216,7 +216,7 @@
 				.merge(newCircles)
 				.attr('cx', (d) => d.projected[0])
 				.attr('cy', (d) => d.projected[1])
-				.on('mouseover', function (event, data) {
+				.on('mouseover', function (event, d) {
 					// Disable hover during zoom for performance
 					if (isZooming) return;
 
@@ -225,13 +225,22 @@
 						.attr('stroke', 'red')
 						.attr('r', 4);
 
-					tooltip.html(`Severity: ${data.properties.severity}`);
+					tooltip.html(
+						`<b>Accident Details</b><br><b>Description:</b> ` +
+							d.properties.description +
+							`<br><b>Street:</b> ` +
+							d.properties.street +
+							`<br><b>County:</b> ` +
+							d.properties.county +
+							`<br><b>Zipcode:</b> ` +
+							d.properties.zipcode
+					);
 					tooltip
 						.style('visibility', 'visible')
 						.style('top', event.pageY - 15 + 'px')
 						.style('left', event.pageX + 15 + 'px');
 				})
-				.on('mouseout', function (event, data) {
+				.on('mouseout', function (event, d) {
 					d3.select(this)
 						.attr('stroke', '#666666')
 						.attr('fill', '#888888')
