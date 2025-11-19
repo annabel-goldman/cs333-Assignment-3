@@ -1,29 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<meta charset="utf-8" />
-	<style>
-		svg {
-			width: 65vw;
-			height: 65vw;
-		}
-
-		/* GPU acceleration for smoother transforms */
-		.states,
-		.crashes {
-			will-change: transform;
-		}
-
-		/* Optimize rendering performance */
-		.states path {
-			stroke-width: 1px;
-			vector-effect: non-scaling-stroke;
-		}
-
-		.crashes circle {
-			stroke-width: 1px;
-			vector-effect: non-scaling-stroke;
-		}
-	</style>
+	<link rel="stylesheet" href="styles.css" />
 
 	<body>
 		<div id="controls">
