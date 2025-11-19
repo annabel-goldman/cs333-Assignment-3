@@ -189,18 +189,6 @@
 			};
 		}
 
-		// Debounced update function to prevent excessive re-renders if user rapidly changes filters
-		// Essentially, it'll wait 100ms after the last change before it begins the change
-		const debouncedUpdate = debounce(updateAndFilterPoints, 100);
-
-		function debounce(func, delay) {
-			let timeoutId;
-			return function (...args) {
-				clearTimeout(timeoutId);
-				timeoutId = setTimeout(() => func.apply(this, args), delay);
-			};
-		}
-
 		//  ------------------------ SET UP  helpers  --------------------------
 
 		// function that draws the circles based on a given dataset
@@ -307,14 +295,14 @@
 
 				const displayText = displayHour + ':00 ' + period;
 				d3.select('#timeDisplay').text(displayText);
-				debouncedUpdate();
+				updateAndFilterPoints();
 			});
 		}
 
 		function setupButtons() {
 			d3.select('#showAllTimesBtn').on('click', function () {
 				filterByTime = false;
-				debouncedUpdate();
+				updateAndFilterPoints();
 			});
 		}
 
