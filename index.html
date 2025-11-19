@@ -3,8 +3,8 @@
 	<meta charset="utf-8" />
 	<style>
 		svg {
-			width: 800px;
-			height: 800px;
+			width: 65vw;
+			height: 65vw;
 		}
 
 		/* GPU acceleration for smoother transforms */
@@ -47,8 +47,8 @@
 	<script>
 		// ------------------------ SET UP canvas --------------------------
 		var margin = { top: 20, right: 20, bottom: 20, left: 20 },
-			width = +400 - margin.left - margin.right,
-			height = +400 - margin.top - margin.bottom;
+			width = window.innerWidth - margin.left - margin.right,
+			height = window.innerHeight - margin.top - margin.bottom;
 
 		var svg = d3
 			.select('svg')
@@ -60,7 +60,7 @@
 		var projection = d3
 			.geoAlbersUsa()
 			.scale(4000)
-			.translate([width / 20 - 400, height / 20 - 400]);
+			.translate([width / 20 - width / 3, height / 20 - height / 2]);
 
 		//geopath coverts geojson geometry to svg path
 		//projection here is func we use to convert geometry points into svg points
