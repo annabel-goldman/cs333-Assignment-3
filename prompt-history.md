@@ -5,6 +5,14 @@
 how can i improve the performance of this d3 code? is there a way to leverage async and/or storing json data in variables?
 ```
 
+```
+are there any more ways I can optimize this index.html file?
+```
+
+```
+How do I addressL [Violation] Added non-passive event listener to a scroll-blocking 'wheel' event. Consider marking event handler as 'passive' to make the page more responsive
+```
+
 ## Google Searches / AI Overview
 ```
 how to get svg element clicked inside of d3 handler?
