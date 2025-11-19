@@ -93,6 +93,10 @@
 		var zoom = d3
 			.zoom()
 			.scaleExtent([1, 8]) // zoom ranges from minimum of 1x to maximum of 8x
+			.filter(function (event) {
+				// Allow wheel events to be passive when possible
+				return !event.ctrlKey && !event.button;
+			})
 			.on(
 				'start',
 				function () {
