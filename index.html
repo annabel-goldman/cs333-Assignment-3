@@ -6,11 +6,19 @@
 	<body>
 		<div id="controls">
 			<button id="resetAllBtn">Reset all filters</button>
-			<label for="severityFilter">Filter by severity:</label>
-			<select id="severityFilter">
+			<label for="windDirectionFilter">Filter by wind direction:</label>
+			<select id="windDirectionFilter">
 				<option value="all">All</option>
-				<option value="2">Severity 2</option>
-				<option value="4">Severity 4</option>
+				<option value="N">North (N)</option>
+				<option value="NE">Northeast (NE)</option>
+				<option value="E">East (E)</option>
+				<option value="SE">Southeast (SE)</option>
+				<option value="S">South (S)</option>
+				<option value="SW">Southwest (SW)</option>
+				<option value="W">West (W)</option>
+				<option value="NW">Northwest (NW)</option>
+				<option value="CALM">Calm</option>
+				<option value="VAR">Variable</option>
 			</select>
 			<label for="startTimeSlider"> Filter by start time:</label>
 
@@ -48,14 +56,14 @@
 		var statesLayer = svg.append('g').attr('class', 'states');
 		var crashesLayer = svg.append('g').attr('class', 'crashes');
 
-		// ------------------------ INITIAL STATE OF GLOBAL VARIABLES ------------------------
+	// ------------------------ INITIAL STATE OF GLOBAL VARIABLES ------------------------
 
-		let allPoints = [];
-		let mapFeatures = [];
-		let currentSeverity = 'all';
-		let currentTime = 0;
-		let filterByTime = false;
-		let isZooming = false;
+	let allPoints = [];
+	let mapFeatures = [];
+	let currentWindDirection = 'all';
+	let currentTime = 0;
+	let filterByTime = false;
+	let isZooming = false;
 
 		// creating a tooltip
 		var tooltip = d3
@@ -232,10 +240,10 @@
 		function updateAndFilterPoints() {
 			let filteredPoints = allPoints;
 
-			//filter by severity
-			if (currentSeverity !== 'all') {
+			//filter by wind direction
+			if (currentWindDirection !== 'all') {
 				filteredPoints = filteredPoints.filter(
-					(point) => String(point.properties.severity) === currentSeverity
+					(point) => point.properties.winddirection === currentWindDirection
 				);
 			}
 
@@ -256,8 +264,8 @@
 
 		// connect the dropdown menu to the visualization
 		function setupFilter() {
-			d3.select('#severityFilter').on('change', function () {
-				currentSeverity = this.value;
+			d3.select('#windDirectionFilter').on('change', function () {
+				currentWindDirection = this.value;
 				updateAndFilterPoints();
 			});
 		}
