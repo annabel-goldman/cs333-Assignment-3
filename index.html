@@ -42,7 +42,7 @@
 		<svg></svg>
 	</body>
 
-	<script src="http://d3js.org/d3.v6.min.js"></script>
+	<script src="https://d3js.org/d3.v6.min.js"></script>
 
 	<script>
 		// ------------------------ SET UP canvas --------------------------
@@ -266,7 +266,7 @@
 			//filter by starttime if filtering enabled
 			if (filterByTime) {
 				filteredPoints = filteredPoints.filter((point) => {
-					const timeString = point.properties.starttime[0];
+					const timeString = point.properties.starttime;
 					const hour = parseInt(timeString.split(' ')[1].split(':')[0]);
 					return hour === currentTime;
 				});
