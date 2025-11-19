@@ -59,13 +59,15 @@ body {
 	margin-top: 5px;
 }
 
-.time-row {
+.time-row,
+.severity-row {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 }
 
-#timeDisplay {
+#timeDisplay,
+#severityDisplay {
 	font-size: 14px;
 }
 
