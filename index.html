@@ -27,6 +27,7 @@
 
 	<body>
 		<div id="controls">
+			<button id="resetAllBtn">Reset all filters</button>
 			<label for="severityFilter">Filter by severity:</label>
 			<select id="severityFilter">
 				<option value="all">All</option>
@@ -279,7 +280,6 @@
 		function setupFilter() {
 			d3.select('#severityFilter').on('change', function () {
 				currentSeverity = this.value;
-				console.log('current severity:' + currentSeverity);
 				updateAndFilterPoints();
 			});
 		}
@@ -309,8 +309,24 @@
 		}
 
 		function setupButtons() {
+			d3.select('#resetAllBtn').on('click', function () {
+				currentSeverity = 'all';
+				filterByTime = false;
+
+				// Reset the UI controls to their default states
+				d3.select('#severityFilter').property('value', 'all');
+				d3.select('#startTimeSlider').property('value', 0);
+				d3.select('#timeDisplay').text('12:00 AM');
+
+				updateAndFilterPoints();
+			});
+
 			d3.select('#showAllTimesBtn').on('click', function () {
 				filterByTime = false;
+
+				d3.select('#startTimeSlider').property('value', 0);
+				d3.select('#timeDisplay').text('12:00 AM');
+
 				updateAndFilterPoints();
 			});
 		}
