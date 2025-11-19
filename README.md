@@ -14,11 +14,11 @@
 
 ## References Used
 
-### Raw Dataset
+#### Raw Dataset
 
 https://www.kaggle.com/datasets/sobhanmoosavi/us-accidents/data
 
-### Resources for setting up Conda and Pandas for data cleaning
+#### Resources for setting up Conda and Pandas for data cleaning
 
 https://saturncloud.io/blog/how-to-create-a-conda-environment-based-on-a-yaml-file-a-guide-for-data-scientists/
 http://gist.github.com/raeidsaqur/72cc9b4cfff22081ccb34dc8292e3c91
@@ -30,28 +30,28 @@ https://www.w3schools.com/python/pandas/pandas_cleaning_empty_cells.asp
 https://stackoverflow.com/questions/31789160/convert-select-columns-in-pandas-dataframe-to-numpy-array
 https://stackoverflow.com/questions/45577630/print-sample-set-of-columns-from-dataframe-in-pandas
 
-### Generating a blank U.S. map in D3:
+#### Generating a blank U.S. map in D3:
 
 https://billmill.org/making_a_us_map.html
 https://medium.com/@amy.degenaro/introduction-to-digital-cartography-geojson-and-d3-js-c27f066aa84
 https://d3js.org/d3-zoom
 https://www.w3schools.com/howto/howto_css_zoom_hover.asp
 
-### Blank U.S. Map GeoJson:
+#### Blank U.S. Map GeoJson:
 
 https://eric.clst.org/tech/usgeojson/
 
-### How to add our own data on top of a blank US map in D3:
+#### How to add our own data on top of a blank US map in D3:
 
 https://observablehq.com/@d3/u-s-map
 https://d3js.org/d3-geo/conic
 https://d3js.org/d3-geo/path
 
-### Implementing sliders in D3:
+#### Implementing sliders in D3:
 
 https://www.geeksforgeeks.org/html/how-to-add-a-range-slider-using-html/
 
 ## Contributors
 
-Annabel Goldman
+Annabel Goldman \
 Joanna Soltys
