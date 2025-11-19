@@ -13,8 +13,14 @@
 			will-change: transform;
 		}
 
-		/* Optimize circle rendering */
+		/* Optimize rendering performance */
+		.states path {
+			stroke-width: 1px;
+			vector-effect: non-scaling-stroke;
+		}
+
 		.crashes circle {
+			stroke-width: 1px;
 			vector-effect: non-scaling-stroke;
 		}
 	</style>
@@ -82,14 +88,7 @@
 			.style('border-width', '1px')
 			.style('padding', '10px');
 
-		// Create the zoom handler
-		svg.selectAll('path, circle').style('vector-effect', 'non-scaling-stroke');
-
-		// Tell browser to prepare for heavy lifting
-		statesLayer.style('will-change', 'transform');
-		crashesLayer.style('will-change', 'transform');
-
-		// Optimized zoom with throttling
+		// Create the zoom handler and optimize it with throttling
 		var zoom = d3
 			.zoom()
 			.scaleExtent([1, 8]) // zoom ranges from minimum of 1x to maximum of 8x
@@ -97,51 +96,10 @@
 				'zoom',
 				throttle(function (event) {
 					currentTransform = event.transform;
-
-					// Apply transform to both layers
 					statesLayer.attr('transform', currentTransform);
 					crashesLayer.attr('transform', currentTransform);
-
-					// Hide circles when zooming for better performance
-					crashesLayer.selectAll('circle').style('opacity', 0.3);
 				}, 16)
-			) // ~60fps throttling
-			.on('end', function () {
-				// Restore full opacity when zoom ends
-				crashesLayer.selectAll('circle').style('opacity', 0.7);
-			});
-
-		// var zoom = d3
-		// 	.zoom()
-		// 	.scaleExtent([1, 8]) // Limit zoom: Min 1x, Max 8x
-		// 	.on('zoom', function (event) {
-		// 		// Get the transform (x, y, k) from the event
-		// 		var transform = event.transform;
-
-		// 		// Apply it to both layers
-		// 		statesLayer.attr('stroke-width', 1).attr('transform', transform);
-		// 		crashesLayer.attr('stroke-width', 1).attr('transform', transform);
-		// 	});
-
-		// Throttle function to limit function calls
-		function throttle(func, delay) {
-			let timeoutId;
-			let lastExecTime = 0;
-			return function (...args) {
-				const currentTime = Date.now();
-
-				if (currentTime - lastExecTime > delay) {
-					func.apply(this, args);
-					lastExecTime = currentTime;
-				} else {
-					clearTimeout(timeoutId);
-					timeoutId = setTimeout(() => {
-						func.apply(this, args);
-						lastExecTime = Date.now();
-					}, delay - (currentTime - lastExecTime));
-				}
-			};
-		}
+			);
 
 		// ------------------------ LOAD IN AND PRE-PROCESS DATA ------------------------
 		d3.json('FLmap.json')
@@ -193,6 +151,39 @@
 				console.log('Error loading in FLmap.json:', error);
 			});
 
+		// ------------------------ OPTIMIZING PERFORMANCE ------------------------
+		// Throttle function to limit function calls
+		function throttle(func, delay) {
+			let timeoutId;
+			let lastExecTime = 0;
+			return function (...args) {
+				const currentTime = Date.now();
+
+				if (currentTime - lastExecTime > delay) {
+					func.apply(this, args);
+					lastExecTime = currentTime;
+				} else {
+					clearTimeout(timeoutId);
+					timeoutId = setTimeout(() => {
+						func.apply(this, args);
+						lastExecTime = Date.now();
+					}, delay - (currentTime - lastExecTime));
+				}
+			};
+		}
+
+		// Debounced update function to prevent excessive re-renders if user rapidly changes filters
+		// Essentially, it'll wait 100ms after the last change before it begins the change
+		const debouncedUpdate = debounce(updateAndFilterPoints, 100);
+
+		function debounce(func, delay) {
+			let timeoutId;
+			return function (...args) {
+				clearTimeout(timeoutId);
+				timeoutId = setTimeout(() => func.apply(this, args), delay);
+			};
+		}
+
 		//  ------------------------ SET UP  helpers  --------------------------
 
 		// function that draws the circles based on a given dataset
@@ -203,10 +194,10 @@
 				.selectAll('circle')
 				.data(renderData, (d) => d.properties.id);
 
-			// Remove old circles
+			// Delete circles for data points that no longer exist
 			circles.exit().remove();
 
-			// Add new circles
+			// Add new circles for new data points
 			const newCircles = circles
 				.enter()
 				.append('circle')
@@ -215,7 +206,7 @@
 				.attr('fill', '#888888')
 				.attr('opacity', 0.7);
 
-			// Update all circles (new + existing)
+			// Update existing and new circles
 			circles
 				.merge(newCircles)
 				.attr('cx', (d) => d.projected[0])
@@ -240,55 +231,6 @@
 
 					tooltip.style('visibility', 'hidden');
 				});
-
-			// crashesLayer
-			// 	//grab all circles from the svg and bind them to the features (passed in data)
-			// 	.selectAll('circle')
-			// 	.data(data)
-			// 	.data(
-			// 		data.filter((d) => d.projected),
-			// 		(d) => d.properties.id
-			// 	)
-			// 	//draw a circle at the specified coordinates
-			// 	.join('circle')
-			// 	.attr('cx', (d) => d.projected[0])
-			// 	.attr('cy', (d) => d.projected[1])
-			// 	.attr('r', 1)
-			// 	.attr('stroke', '#666666')
-			// 	.attr('fill', '#888888')
-			// 	.attr('opacity', 0.7)
-			// 	.on('mouseover', function (event, data) {
-			// 		d3.select(this)
-			// 			.attr('fill', 'red')
-			// 			.attr('stroke', 'red')
-			// 			.attr('r', 4);
-
-			// 		tooltip.html(data.properties.severity);
-
-			// 		tooltip.style('visibility', 'visible');
-			// 		tooltip
-			// 			.style('top', event.offsetY - 15 + 'px')
-			// 			.style('left', event.offsetX + 15 + 'px');
-			// 	})
-			// 	.on('mouseout', function (event, data) {
-			// 		d3.select(this)
-			// 			.attr('stroke', '#666666')
-			// 			.attr('fill', '#888888')
-			// 			.attr('r', 1);
-
-			// 		tooltip.style('visibility', 'hidden');
-			// 	});
-		}
-
-		// Debounced update function to prevent excessive re-renders
-		const debouncedUpdate = debounce(updateAndFilterPoints, 100);
-
-		function debounce(func, delay) {
-			let timeoutId;
-			return function (...args) {
-				clearTimeout(timeoutId);
-				timeoutId = setTimeout(() => func.apply(this, args), delay);
-			};
 		}
 
 		function updateAndFilterPoints() {
@@ -356,6 +298,7 @@
 			});
 		}
 
+		//  ------------------------ SETUP EXECUTION --------------------------
 		setupFilter();
 		setupSliders();
 		setupButtons();
