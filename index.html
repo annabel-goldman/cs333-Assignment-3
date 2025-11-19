@@ -56,7 +56,6 @@
 
 		let allPoints = [];
 		let mapFeatures = [];
-		let activeCounty = null;
 		let currentSeverity = 'all';
 		let currentTime = 0;
 		let filterByTime = false;
@@ -72,6 +71,25 @@
 			.style('border-width', '1px')
 			.style('padding', '10px');
 
+		// Create the zoom handler
+		svg.selectAll('path, circle').style('vector-effect', 'non-scaling-stroke');
+
+		// Tell browser to prepare for heavy lifting
+		statesLayer.style('will-change', 'transform');
+		crashesLayer.style('will-change', 'transform');
+
+		var zoom = d3
+			.zoom()
+			.scaleExtent([1, 8]) // Limit zoom: Min 1x, Max 8x
+			.on('zoom', function (event) {
+				// Get the transform (x, y, k) from the event
+				var transform = event.transform;
+
+				// Apply it to both layers
+				statesLayer.attr('stroke-width', 1).attr('transform', transform);
+				crashesLayer.attr('stroke-width', 1).attr('transform', transform);
+			});
+
 		// ------------------------ LOAD IN AND PRE-PROCESS DATA ------------------------
 		d3.json('FLmap.json')
 			.then(function (us) {
@@ -86,8 +104,7 @@
 					.attr('d', path)
 					.attr('stroke', '#000000')
 					.attr('fill', '#ffffff')
-					.attr('opacity', 0.7)
-					.on('click', countyClicked); //new handler for clicking on county
+					.attr('opacity', 0.7);
 
 				d3.json('FLdata.json')
 					.then(function (points) {
@@ -105,14 +122,7 @@
 							}
 						});
 
-						// pre-associate crash points with their counties
-						mapFeatures.forEach((county) => {
-							// creating a new property for each country to hold its points for better performance down the line
-							county.crashPoints = allPoints.filter((point) =>
-								// this way, we only run geoContains (which is an expensive operation) once
-								d3.geoContains(county, point.geometry.coordinates)
-							);
-						});
+						allPoints = allPoints.filter((point) => point.projected !== null);
 
 						// render the points for the first time
 						updateAndFilterPoints();
@@ -125,56 +135,6 @@
 				console.log('Error loading in FLmap.json:', error);
 			});
 
-		// ------------------------ SET UP handlers  --------------------------
-		function countyClicked(event, county) {
-			//this keyword grabs the dom element clicked
-			const countyElement = this;
-			//if county is active and the same as the county clicked we zoom out
-			if (activeCounty && activeCounty === county) {
-				// zoom out
-				statesLayer.transition().duration(750).attr('transform', '');
-				crashesLayer.transition().duration(750).attr('transform', '');
-				activeCounty = null;
-				updateAndFilterPoints();
-			} else {
-				activeCounty = county;
-
-				//get center of country from the path
-				const boundingbox = countyElement.getBBox();
-				const centerX = boundingbox.x;
-				const centerY = boundingbox.y;
-
-				//scale the map to the bounding box
-				const scale =
-					1 / Math.max(boundingbox.width / width, boundingbox.height / height);
-
-				const translateX = width / 2 - scale * centerX;
-				const translateY = height / 2 - scale * centerY;
-
-				const transformString =
-					'translate(' +
-					translateX +
-					',' +
-					translateY +
-					')' +
-					' scale(' +
-					scale +
-					')';
-
-				statesLayer
-					.transition()
-					.duration(750)
-					.attr('transform', transformString);
-
-				crashesLayer
-					.transition()
-					.duration(750)
-					.attr('transform', transformString);
-
-				updateAndFilterPoints();
-			}
-		}
-
 		//  ------------------------ SET UP  helpers  --------------------------
 
 		// function that draws the circles based on a given dataset
@@ -183,11 +143,14 @@
 				//grab all circles from the svg and bind them to the features (passed in data)
 				.selectAll('circle')
 				.data(data)
-
+				.data(
+					data.filter((d) => d.projected),
+					(d) => d.properties.id
+				)
 				//draw a circle at the specified coordinates
 				.join('circle')
-				.attr('cx', (d) => projection(d.geometry.coordinates)[0])
-				.attr('cy', (d) => projection(d.geometry.coordinates)[1])
+				.attr('cx', (d) => d.projected[0])
+				.attr('cy', (d) => d.projected[1])
 				.attr('r', 1)
 				.attr('stroke', '#666666')
 				.attr('fill', '#888888')
@@ -217,11 +180,6 @@
 
 		function updateAndFilterPoints() {
 			let filteredPoints = allPoints;
-
-			//filter by active county
-			if (activeCounty) {
-				filteredPoints = activeCounty.crashPoints;
-			}
 
 			//filter by severity
 			if (currentSeverity !== 'all') {
@@ -285,5 +243,6 @@
 		setupFilter();
 		setupSliders();
 		setupButtons();
+		svg.call(zoom);
 	</script>
 </html>
