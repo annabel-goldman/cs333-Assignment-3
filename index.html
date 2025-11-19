@@ -76,6 +76,7 @@
 		let currentSeverity = 'all';
 		let currentTime = 0;
 		let filterByTime = false;
+		let isZooming = false;
 
 		// creating a tooltip
 		var tooltip = d3
@@ -93,13 +94,25 @@
 			.zoom()
 			.scaleExtent([1, 8]) // zoom ranges from minimum of 1x to maximum of 8x
 			.on(
+				'start',
+				function () {
+					isZooming = true;
+					tooltip.style('visibility', 'hidden');
+				},
+				16
+			) // 60 fps throttling
+			.on(
 				'zoom',
 				throttle(function (event) {
 					currentTransform = event.transform;
 					statesLayer.attr('transform', currentTransform);
 					crashesLayer.attr('transform', currentTransform);
 				}, 16)
-			);
+			)
+			.on('end', function () {
+				isZooming = false;
+				tooltip.style('visibility', 'visible');
+			});
 
 		// ------------------------ LOAD IN AND PRE-PROCESS DATA ------------------------
 		d3.json('FLmap.json')
@@ -188,7 +201,7 @@
 
 		// function that draws the circles based on a given dataset
 		function renderPoints(data) {
-			let renderData = data;
+			const renderData = data;
 
 			const circles = crashesLayer
 				.selectAll('circle')
@@ -212,6 +225,9 @@
 				.attr('cx', (d) => d.projected[0])
 				.attr('cy', (d) => d.projected[1])
 				.on('mouseover', function (event, data) {
+					// Disable hover during zoom for performance
+					if (isZooming) return;
+
 					d3.select(this)
 						.attr('fill', 'red')
 						.attr('stroke', 'red')
