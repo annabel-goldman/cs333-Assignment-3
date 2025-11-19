@@ -6,6 +6,17 @@
 			width: 800px;
 			height: 800px;
 		}
+
+		/* GPU acceleration for smoother transforms */
+		.states,
+		.crashes {
+			will-change: transform;
+		}
+
+		/* Optimize circle rendering */
+		.crashes circle {
+			vector-effect: non-scaling-stroke;
+		}
 	</style>
 
 	<body>
@@ -78,17 +89,59 @@
 		statesLayer.style('will-change', 'transform');
 		crashesLayer.style('will-change', 'transform');
 
+		// Optimized zoom with throttling
 		var zoom = d3
 			.zoom()
-			.scaleExtent([1, 8]) // Limit zoom: Min 1x, Max 8x
-			.on('zoom', function (event) {
-				// Get the transform (x, y, k) from the event
-				var transform = event.transform;
+			.scaleExtent([1, 8]) // zoom ranges from minimum of 1x to maximum of 8x
+			.on(
+				'zoom',
+				throttle(function (event) {
+					currentTransform = event.transform;
 
-				// Apply it to both layers
-				statesLayer.attr('stroke-width', 1).attr('transform', transform);
-				crashesLayer.attr('stroke-width', 1).attr('transform', transform);
+					// Apply transform to both layers
+					statesLayer.attr('transform', currentTransform);
+					crashesLayer.attr('transform', currentTransform);
+
+					// Hide circles when zooming for better performance
+					crashesLayer.selectAll('circle').style('opacity', 0.3);
+				}, 16)
+			) // ~60fps throttling
+			.on('end', function () {
+				// Restore full opacity when zoom ends
+				crashesLayer.selectAll('circle').style('opacity', 0.7);
 			});
+
+		// var zoom = d3
+		// 	.zoom()
+		// 	.scaleExtent([1, 8]) // Limit zoom: Min 1x, Max 8x
+		// 	.on('zoom', function (event) {
+		// 		// Get the transform (x, y, k) from the event
+		// 		var transform = event.transform;
+
+		// 		// Apply it to both layers
+		// 		statesLayer.attr('stroke-width', 1).attr('transform', transform);
+		// 		crashesLayer.attr('stroke-width', 1).attr('transform', transform);
+		// 	});
+
+		// Throttle function to limit function calls
+		function throttle(func, delay) {
+			let timeoutId;
+			let lastExecTime = 0;
+			return function (...args) {
+				const currentTime = Date.now();
+
+				if (currentTime - lastExecTime > delay) {
+					func.apply(this, args);
+					lastExecTime = currentTime;
+				} else {
+					clearTimeout(timeoutId);
+					timeoutId = setTimeout(() => {
+						func.apply(this, args);
+						lastExecTime = Date.now();
+					}, delay - (currentTime - lastExecTime));
+				}
+			};
+		}
 
 		// ------------------------ LOAD IN AND PRE-PROCESS DATA ------------------------
 		d3.json('FLmap.json')
@@ -111,21 +164,26 @@
 						allPoints = points.features;
 
 						// pre-calculate projections for all crash points
-						allPoints.forEach((point) => {
+						allPoints.forEach((point, index) => {
 							// creating a new property for each point so that we can save their projection and render them much faster later
 							point.projected = projection(point.geometry.coordinates);
 
-							// TODO: check if really ok to just assign whatever here
-							// Ensure ID for D3 key function
-							if (!point.properties.id) {
-								point.properties.id = Math.random();
+							if (
+								point.properties.id === null ||
+								point.properties.id === undefined
+							) {
+								point.properties.id = index;
 							}
+
+							return point;
 						});
 
 						allPoints = allPoints.filter((point) => point.projected !== null);
 
-						// render the points for the first time
-						updateAndFilterPoints();
+						// Initial render with requestAnimationFrame for better performance
+						requestAnimationFrame(() => {
+							updateAndFilterPoints();
+						});
 					})
 					.catch((error) => {
 						console.log('Error loading in FLdata.json:', error);
@@ -139,34 +197,40 @@
 
 		// function that draws the circles based on a given dataset
 		function renderPoints(data) {
-			crashesLayer
-				//grab all circles from the svg and bind them to the features (passed in data)
+			let renderData = data;
+
+			const circles = crashesLayer
 				.selectAll('circle')
-				.data(data)
-				.data(
-					data.filter((d) => d.projected),
-					(d) => d.properties.id
-				)
-				//draw a circle at the specified coordinates
-				.join('circle')
-				.attr('cx', (d) => d.projected[0])
-				.attr('cy', (d) => d.projected[1])
+				.data(renderData, (d) => d.properties.id);
+
+			// Remove old circles
+			circles.exit().remove();
+
+			// Add new circles
+			const newCircles = circles
+				.enter()
+				.append('circle')
 				.attr('r', 1)
 				.attr('stroke', '#666666')
 				.attr('fill', '#888888')
-				.attr('opacity', 0.7)
+				.attr('opacity', 0.7);
+
+			// Update all circles (new + existing)
+			circles
+				.merge(newCircles)
+				.attr('cx', (d) => d.projected[0])
+				.attr('cy', (d) => d.projected[1])
 				.on('mouseover', function (event, data) {
 					d3.select(this)
 						.attr('fill', 'red')
 						.attr('stroke', 'red')
 						.attr('r', 4);
 
-					tooltip.html(data.properties.severity);
-
-					tooltip.style('visibility', 'visible');
+					tooltip.html(`Severity: ${data.properties.severity}`);
 					tooltip
-						.style('top', event.offsetY - 15 + 'px')
-						.style('left', event.offsetX + 15 + 'px');
+						.style('visibility', 'visible')
+						.style('top', event.pageY - 15 + 'px')
+						.style('left', event.pageX + 15 + 'px');
 				})
 				.on('mouseout', function (event, data) {
 					d3.select(this)
@@ -176,6 +240,55 @@
 
 					tooltip.style('visibility', 'hidden');
 				});
+
+			// crashesLayer
+			// 	//grab all circles from the svg and bind them to the features (passed in data)
+			// 	.selectAll('circle')
+			// 	.data(data)
+			// 	.data(
+			// 		data.filter((d) => d.projected),
+			// 		(d) => d.properties.id
+			// 	)
+			// 	//draw a circle at the specified coordinates
+			// 	.join('circle')
+			// 	.attr('cx', (d) => d.projected[0])
+			// 	.attr('cy', (d) => d.projected[1])
+			// 	.attr('r', 1)
+			// 	.attr('stroke', '#666666')
+			// 	.attr('fill', '#888888')
+			// 	.attr('opacity', 0.7)
+			// 	.on('mouseover', function (event, data) {
+			// 		d3.select(this)
+			// 			.attr('fill', 'red')
+			// 			.attr('stroke', 'red')
+			// 			.attr('r', 4);
+
+			// 		tooltip.html(data.properties.severity);
+
+			// 		tooltip.style('visibility', 'visible');
+			// 		tooltip
+			// 			.style('top', event.offsetY - 15 + 'px')
+			// 			.style('left', event.offsetX + 15 + 'px');
+			// 	})
+			// 	.on('mouseout', function (event, data) {
+			// 		d3.select(this)
+			// 			.attr('stroke', '#666666')
+			// 			.attr('fill', '#888888')
+			// 			.attr('r', 1);
+
+			// 		tooltip.style('visibility', 'hidden');
+			// 	});
+		}
+
+		// Debounced update function to prevent excessive re-renders
+		const debouncedUpdate = debounce(updateAndFilterPoints, 100);
+
+		function debounce(func, delay) {
+			let timeoutId;
+			return function (...args) {
+				clearTimeout(timeoutId);
+				timeoutId = setTimeout(() => func.apply(this, args), delay);
+			};
 		}
 
 		function updateAndFilterPoints() {
@@ -197,7 +310,10 @@
 				});
 			}
 
-			renderPoints(filteredPoints);
+			// Use requestAnimationFrame for smooth rendering
+			requestAnimationFrame(() => {
+				renderPoints(filteredPoints);
+			});
 		}
 
 		// connect the dropdown menu to the visualization
@@ -229,14 +345,14 @@
 
 				const displayText = displayHour + ':00 ' + period;
 				d3.select('#timeDisplay').text(displayText);
-				updateAndFilterPoints();
+				debouncedUpdate();
 			});
 		}
 
 		function setupButtons() {
 			d3.select('#showAllTimesBtn').on('click', function () {
 				filterByTime = false;
-				updateAndFilterPoints();
+				debouncedUpdate();
 			});
 		}
 
