@@ -1,44 +1,49 @@
 <!DOCTYPE html>
 <html>
 	<meta charset="utf-8" />
-	<style>
-		svg {
-			width: 65vw;
-			height: 65vw;
-		}
-
-		/* GPU acceleration for smoother transforms */
-		.states,
-		.crashes {
-			will-change: transform;
-		}
-
-		/* Optimize rendering performance */
-		.states path {
-			stroke-width: 1px;
-			vector-effect: non-scaling-stroke;
-		}
-
-		.crashes circle {
-			stroke-width: 1px;
-			vector-effect: non-scaling-stroke;
-		}
-	</style>
+	<link rel="stylesheet" href="styles.css" />
 
 	<body>
 		<div id="controls">
 			<button id="resetAllBtn">Reset all filters</button>
-			<label for="severityFilter">Filter by severity:</label>
-			<select id="severityFilter">
-				<option value="all">All</option>
-				<option value="2">Severity 2</option>
-				<option value="4">Severity 4</option>
-			</select>
-			<label for="startTimeSlider"> Filter by start time:</label>
+			
+			<div class="filter-section">
+				<h3>WEATHER</h3>
+				<label for="windDirectionFilter">Wind Direction</label>
+				<select id="windDirectionFilter">
+					<option value="all">All</option>
+					<option value="N">North (N)</option>
+					<option value="NE">Northeast (NE)</option>
+					<option value="E">East (E)</option>
+					<option value="SE">Southeast (SE)</option>
+					<option value="S">South (S)</option>
+					<option value="SW">Southwest (SW)</option>
+					<option value="W">West (W)</option>
+					<option value="NW">Northwest (NW)</option>
+					<option value="CALM">Calm</option>
+					<option value="VAR">Variable</option>
+				</select>
+			</div>
+			
+			<div class="filter-section">
+				<h3>TIME</h3>
+				<div class="time-row">
+					<label for="startTimeSlider">Start Time</label>
+					<span id="timeDisplay">12:00 AM</span>
+				</div>
+				<input id="startTimeSlider" type="range" min="0" max="23" value="0" step="1" />
+				<button id="showAllTimesBtn">Show All Times</button>
+			</div>
 
-			<input id="startTimeSlider" type="range" min="0" max="23" value="0" />
-			<span id="timeDisplay">12:00 AM</span>
-			<button id="showAllTimesBtn">Show All Times</button>
+			<div class="filter-section">
+				<h3>META DATA</h3>
+				<div class="severity-row">
+					<label for="severitySlider">Severity</label>
+					<span id="severityDisplay">All</span>
+				</div>
+				<input id="severitySlider" type="range" min="0" max="2" value="0" step="1" />
+				<button id="showAllSeveritiesBtn">Show All Severities</button>
+			</div>
 		</div>
 		<svg></svg>
 	</body>
@@ -70,14 +75,16 @@
 		var statesLayer = svg.append('g').attr('class', 'states');
 		var crashesLayer = svg.append('g').attr('class', 'crashes');
 
-		// ------------------------ INITIAL STATE OF GLOBAL VARIABLES ------------------------
+	// ------------------------ INITIAL STATE OF GLOBAL VARIABLES ------------------------
 
-		let allPoints = [];
-		let mapFeatures = [];
-		let currentSeverity = 'all';
-		let currentTime = 0;
-		let filterByTime = false;
-		let isZooming = false;
+	let allPoints = [];
+	let mapFeatures = [];
+	let currentWindDirection = 'all';
+	let currentSeverity = 'all';
+	let currentTime = 0;
+	let filterByTime = false;
+	let filterBySeverity = false;
+	let isZooming = false;
 
 		// creating a tooltip
 		var tooltip = d3
@@ -254,11 +261,18 @@
 		function updateAndFilterPoints() {
 			let filteredPoints = allPoints;
 
-			//filter by severity
-			if (currentSeverity !== 'all') {
+			//filter by wind direction
+			if (currentWindDirection !== 'all') {
 				filteredPoints = filteredPoints.filter(
-					(point) => String(point.properties.severity) === currentSeverity
+					(point) => point.properties.winddirection === currentWindDirection
 				);
+			}
+
+			//filter by severity if filtering enabled
+			if (filterBySeverity) {
+				filteredPoints = filteredPoints.filter((point) => {
+					return point.properties.severity === currentSeverity;
+				});
 			}
 
 			//filter by starttime if filtering enabled
@@ -278,13 +292,33 @@
 
 		// connect the dropdown menu to the visualization
 		function setupFilter() {
-			d3.select('#severityFilter').on('change', function () {
-				currentSeverity = this.value;
+			d3.select('#windDirectionFilter').on('change', function () {
+				currentWindDirection = this.value;
 				updateAndFilterPoints();
 			});
 		}
 
 		function setupSliders() {
+			d3.select('#severitySlider').on('input', function () {
+				const sliderValue = parseInt(this.value);
+				
+				if (sliderValue === 0) {
+					currentSeverity = 'all';
+					filterBySeverity = false;
+					d3.select('#severityDisplay').text('All');
+				} else if (sliderValue === 1) {
+					currentSeverity = 2;
+					filterBySeverity = true;
+					d3.select('#severityDisplay').text('2');
+				} else if (sliderValue === 2) {
+					currentSeverity = 4;
+					filterBySeverity = true;
+					d3.select('#severityDisplay').text('4');
+				}
+				
+				updateAndFilterPoints();
+			});
+
 			d3.select('#startTimeSlider').on('input', function () {
 				currentTime = parseInt(this.value);
 				filterByTime = true;
@@ -309,26 +343,41 @@
 		}
 
 		function setupButtons() {
-			d3.select('#resetAllBtn').on('click', function () {
-				currentSeverity = 'all';
-				filterByTime = false;
+		d3.select('#resetAllBtn').on('click', function () {
+			currentWindDirection = 'all';
+			currentSeverity = 'all';
+			currentTime = 0;
+			filterByTime = false;
+			filterBySeverity = false;
 
-				// Reset the UI controls to their default states
-				d3.select('#severityFilter').property('value', 'all');
-				d3.select('#startTimeSlider').property('value', 0);
-				d3.select('#timeDisplay').text('12:00 AM');
+			d3.select('#windDirectionFilter').property('value', 'all');
+			d3.select('#severitySlider').node().value = 0;
+			d3.select('#severityDisplay').text('All');
+			d3.select('#startTimeSlider').node().value = 0;
+			d3.select('#timeDisplay').text('12:00 AM');
 
-				updateAndFilterPoints();
-			});
+			updateAndFilterPoints();
+		});
 
-			d3.select('#showAllTimesBtn').on('click', function () {
-				filterByTime = false;
+		d3.select('#showAllSeveritiesBtn').on('click', function () {
+			filterBySeverity = false;
+			currentSeverity = 'all';
 
-				d3.select('#startTimeSlider').property('value', 0);
-				d3.select('#timeDisplay').text('12:00 AM');
+			d3.select('#severitySlider').node().value = 0;
+			d3.select('#severityDisplay').text('All');
 
-				updateAndFilterPoints();
-			});
+			updateAndFilterPoints();
+		});
+
+		d3.select('#showAllTimesBtn').on('click', function () {
+			filterByTime = false;
+			currentTime = 0;
+
+			d3.select('#startTimeSlider').node().value = 0;
+			d3.select('#timeDisplay').text('12:00 AM');
+
+			updateAndFilterPoints();
+		});
 		}
 
 		//  ------------------------ SETUP EXECUTION --------------------------
