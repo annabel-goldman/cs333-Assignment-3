@@ -213,7 +213,7 @@
 			//filter by starttime if filtering enabled
 			if (filterByTime) {
 				filteredPoints = filteredPoints.filter((point) => {
-					const timeString = point.properties.starttime[0];
+					const timeString = point.properties.starttime;
 					const hour = parseInt(timeString.split(' ')[1].split(':')[0]);
 					return hour === currentTime;
 				});
