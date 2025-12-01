@@ -97,6 +97,7 @@
 	let currentMaxTemp = 90;
 	let filterByTime = false;
 	let filterBySeverity = false;
+	let filterByTemp = false;
 	let isZooming = false;
 
 		// creating a tooltip
@@ -319,49 +320,82 @@
 			});
 		}
 
-		function setupSliders() {
-			d3.select('#severitySlider').on('input', function () {
-				const sliderValue = parseInt(this.value);
-				
-				if (sliderValue === 0) {
-					currentSeverity = 'all';
-					filterBySeverity = false;
-					d3.select('#severityDisplay').text('All');
-				} else if (sliderValue === 1) {
-					currentSeverity = 2;
-					filterBySeverity = true;
-					d3.select('#severityDisplay').text('2');
-				} else if (sliderValue === 2) {
-					currentSeverity = 4;
-					filterBySeverity = true;
-					d3.select('#severityDisplay').text('4');
-				}
-				
+	function setupSliders() {
+		d3.select('#severitySlider').on('input', function () {
+			const sliderValue = parseInt(this.value);
+			
+			if (sliderValue === 0) {
+				currentSeverity = 'all';
+				filterBySeverity = false;
+				d3.select('#severityDisplay').text('All');
+			} else if (sliderValue === 1) {
+				currentSeverity = 2;
+				filterBySeverity = true;
+				d3.select('#severityDisplay').text('2');
+			} else if (sliderValue === 2) {
+				currentSeverity = 4;
+				filterBySeverity = true;
+				d3.select('#severityDisplay').text('4');
+			}
+			
+			updateAndFilterPoints();
+		});
+
+		d3.select('#startTimeSlider').on('input', function () {
+			currentTime = parseInt(this.value);
+			filterByTime = true;
+
+			let displayHour = currentTime;
+			let period = 'AM';
+
+			if (currentTime === 0) {
+				displayHour = 12;
+			} else if (currentTime === 12) {
+				displayHour = 12;
+				period = 'PM';
+			} else if (currentTime > 12) {
+				displayHour = currentTime - 12;
+				period = 'PM';
+			}
+
+			const displayText = displayHour + ':00 ' + period;
+			d3.select('#timeDisplay').text(displayText);
+			updateAndFilterPoints();
+		});
+
+		const minTempSlider = d3.select('#minTempSlider');
+		const maxTempSlider = d3.select('#maxTempSlider');
+		const minTempDisplay = d3.select('#minTempDisplay');
+		const maxTempDisplay = d3.select('#maxTempDisplay');
+
+		minTempSlider.on('input', function () {
+			const minVal = parseInt(this.value);
+			const maxVal = parseInt(maxTempSlider.node().value);
+			
+			if (minVal <= maxVal) {
+				currentMinTemp = minVal;
+				minTempDisplay.text(minVal + '°F');
+				filterByTemp = true;
 				updateAndFilterPoints();
-			});
+			} else {
+				this.value = currentMinTemp;
+			}
+		});
 
-			d3.select('#startTimeSlider').on('input', function () {
-				currentTime = parseInt(this.value);
-				filterByTime = true;
-
-				let displayHour = currentTime;
-				let period = 'AM';
-
-				if (currentTime === 0) {
-					displayHour = 12;
-				} else if (currentTime === 12) {
-					displayHour = 12;
-					period = 'PM';
-				} else if (currentTime > 12) {
-					displayHour = currentTime - 12;
-					period = 'PM';
-				}
-
-				const displayText = displayHour + ':00 ' + period;
-				d3.select('#timeDisplay').text(displayText);
+		maxTempSlider.on('input', function () {
+			const maxVal = parseInt(this.value);
+			const minVal = parseInt(minTempSlider.node().value);
+			
+			if (maxVal >= minVal) {
+				currentMaxTemp = maxVal;
+				maxTempDisplay.text(maxVal + '°F');
+				filterByTemp = true;
 				updateAndFilterPoints();
-			});
-		}
+			} else {
+				this.value = currentMaxTemp;
+			}
+		});
+	}
 
 		function setupButtons() {
 		d3.select('#resetAllBtn').on('click', function () {
