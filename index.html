@@ -23,6 +23,17 @@
 					<option value="CALM">Calm</option>
 					<option value="VAR">Variable</option>
 				</select>
+				
+				<div class="temp-row">
+					<span id="minTempDisplay">25°F</span>
+					<span>-</span>
+					<span id="maxTempDisplay">90°F</span>
+				</div>
+				<div class="range-slider">
+					<input id="minTempSlider" type="range" min="25" max="90" value="25" step="1" />
+					<input id="maxTempSlider" type="range" min="25" max="90" value="90" step="1" />
+				</div>
+				<button id="showAllTempsBtn">Show All Temps</button>
 			</div>
 			
 			<div class="filter-section">
@@ -31,7 +42,7 @@
 					<label for="startTimeSlider">Start Time</label>
 					<span id="timeDisplay">12:00 AM</span>
 				</div>
-				<input id="startTimeSlider" type="range" min="0" max="23" value="0" step="1" />
+					<input id="startTimeSlider" type="range" min="0" max="23" value="0" step="1" />
 				<button id="showAllTimesBtn">Show All Times</button>
 			</div>
 
@@ -82,6 +93,8 @@
 	let currentWindDirection = 'all';
 	let currentSeverity = 'all';
 	let currentTime = 0;
+	let currentMinTemp = 25;
+	let currentMaxTemp = 90;
 	let filterByTime = false;
 	let filterBySeverity = false;
 	let isZooming = false;
@@ -284,6 +297,14 @@
 				});
 			}
 
+			//filter by temperature if filtering enabled
+			if (filterByTemp) {
+				filteredPoints = filteredPoints.filter((point) => {
+					const temp = parseFloat(point.properties.temperature);
+					return temp >= currentMinTemp && temp <= currentMaxTemp;
+				});
+			}
+
 			// Use requestAnimationFrame for smooth rendering
 			requestAnimationFrame(() => {
 				renderPoints(filteredPoints);
@@ -347,14 +368,21 @@
 			currentWindDirection = 'all';
 			currentSeverity = 'all';
 			currentTime = 0;
+			currentMinTemp = 25;
+			currentMaxTemp = 90;
 			filterByTime = false;
 			filterBySeverity = false;
+			filterByTemp = false;
 
 			d3.select('#windDirectionFilter').property('value', 'all');
 			d3.select('#severitySlider').node().value = 0;
 			d3.select('#severityDisplay').text('All');
 			d3.select('#startTimeSlider').node().value = 0;
 			d3.select('#timeDisplay').text('12:00 AM');
+			d3.select('#minTempSlider').node().value = 25;
+			d3.select('#maxTempSlider').node().value = 90;
+			d3.select('#minTempDisplay').text('25°F');
+			d3.select('#maxTempDisplay').text('90°F');
 
 			updateAndFilterPoints();
 		});
@@ -375,6 +403,19 @@
 
 			d3.select('#startTimeSlider').node().value = 0;
 			d3.select('#timeDisplay').text('12:00 AM');
+
+			updateAndFilterPoints();
+		});
+
+		d3.select('#showAllTempsBtn').on('click', function () {
+			filterByTemp = false;
+			currentMinTemp = 25;
+			currentMaxTemp = 90;
+
+			d3.select('#minTempSlider').node().value = 25;
+			d3.select('#maxTempSlider').node().value = 90;
+			d3.select('#minTempDisplay').text('25°F');
+			d3.select('#maxTempDisplay').text('90°F');
 
 			updateAndFilterPoints();
 		});
