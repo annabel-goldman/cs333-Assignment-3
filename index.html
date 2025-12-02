@@ -7,54 +7,66 @@
 		<div id="controls">
 			<button id="resetAllBtn">Reset all filters</button>
 			
-			<div class="filter-section">
-				<h3>WEATHER</h3>
-				<label for="windDirectionFilter">Wind Direction</label>
-				<select id="windDirectionFilter">
-					<option value="all">All</option>
-					<option value="N">North (N)</option>
-					<option value="NE">Northeast (NE)</option>
-					<option value="E">East (E)</option>
-					<option value="SE">Southeast (SE)</option>
-					<option value="S">South (S)</option>
-					<option value="SW">Southwest (SW)</option>
-					<option value="W">West (W)</option>
-					<option value="NW">Northwest (NW)</option>
-					<option value="CALM">Calm</option>
-					<option value="VAR">Variable</option>
-				</select>
-				
-				<div class="temp-row">
-					<span id="minTempDisplay">25°F</span>
-					<span>-</span>
-					<span id="maxTempDisplay">90°F</span>
-				</div>
-				<div class="range-slider">
-					<input id="minTempSlider" type="range" min="25" max="90" value="25" step="1" />
-					<input id="maxTempSlider" type="range" min="25" max="90" value="90" step="1" />
-				</div>
-				<button id="showAllTempsBtn">Show All Temps</button>
-			</div>
+		<div class="filter-section">
+			<h3>WEATHER</h3>
+			<label for="windDirectionFilter">Wind Direction</label>
+			<select id="windDirectionFilter">
+				<option value="all">All</option>
+				<option value="N">North (N)</option>
+				<option value="NE">Northeast (NE)</option>
+				<option value="E">East (E)</option>
+				<option value="SE">Southeast (SE)</option>
+				<option value="S">South (S)</option>
+				<option value="SW">Southwest (SW)</option>
+				<option value="W">West (W)</option>
+				<option value="NW">Northwest (NW)</option>
+				<option value="CALM">Calm</option>
+				<option value="VAR">Variable</option>
+			</select>
 			
-			<div class="filter-section">
-				<h3>TIME</h3>
-				<div class="time-row">
-					<label for="startTimeSlider">Start Time</label>
-					<span id="timeDisplay">12:00 AM</span>
+			<div class="filter-with-reset">
+				<button id="showAllTempsBtn">Reset</button>
+				<div class="filter-content">
+					<div class="temp-row">
+						<span id="minTempDisplay">25°F</span>
+						<span>-</span>
+						<span id="maxTempDisplay">90°F</span>
+					</div>
+					<div class="range-slider">
+						<input id="minTempSlider" type="range" min="25" max="90" value="25" step="1" />
+						<input id="maxTempSlider" type="range" min="25" max="90" value="90" step="1" />
+					</div>
 				</div>
+			</div>
+		</div>
+			
+		<div class="filter-section">
+			<h3>TIME</h3>
+			<div class="filter-with-reset">
+				<button id="showAllTimesBtn">Reset</button>
+				<div class="filter-content">
+					<div class="time-row">
+						<label for="startTimeSlider">Start Time</label>
+						<span id="timeDisplay">12:00 AM</span>
+					</div>
 					<input id="startTimeSlider" type="range" min="0" max="23" value="0" step="1" />
-				<button id="showAllTimesBtn">Show All Times</button>
-			</div>
-
-			<div class="filter-section">
-				<h3>META DATA</h3>
-				<div class="severity-row">
-					<label for="severitySlider">Severity</label>
-					<span id="severityDisplay">All</span>
 				</div>
-				<input id="severitySlider" type="range" min="0" max="2" value="0" step="1" />
-				<button id="showAllSeveritiesBtn">Show All Severities</button>
 			</div>
+		</div>
+
+		<div class="filter-section">
+			<h3>META DATA</h3>
+			<div class="filter-with-reset">
+				<button id="showAllSeveritiesBtn">Reset</button>
+				<div class="filter-content">
+					<div class="severity-row">
+						<label for="severitySlider">Severity</label>
+						<span id="severityDisplay">All</span>
+					</div>
+					<input id="severitySlider" type="range" min="0" max="2" value="0" step="1" />
+				</div>
+			</div>
+		</div>
 		</div>
 		<svg></svg>
 	</body>

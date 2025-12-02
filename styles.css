@@ -36,6 +36,7 @@ body {
 	gap: 15px;
 	padding: 20px;
 	width: 200px;
+	font-size: 12px;
 }
 
 .filter-section {
@@ -52,10 +53,31 @@ body {
 	text-align: center;
 	border-bottom: 2px solid #000;
 	padding-bottom: 5px;
+	font-size: 13px;
+}
+
+.filter-with-reset {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+}
+
+.filter-with-reset button {
+	flex-shrink: 0;
+	padding: 5px 8px;
+	font-size: 10px;
+	white-space: nowrap;
+}
+
+.filter-content {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
 }
 
 .filter-section label {
-	font-size: 14px;
+	font-size: 11px;
 	margin-top: 5px;
 }
 
@@ -69,7 +91,7 @@ body {
 
 #timeDisplay,
 #severityDisplay {
-	font-size: 14px;
+	font-size: 11px;
 }
 
 button {
@@ -77,11 +99,13 @@ button {
 	cursor: pointer;
 	border: 1px solid #000;
 	background: #fff;
+	font-size: 11px;
 }
 
 select {
 	padding: 5px;
 	border: 1px solid #000;
+	font-size: 11px;
 }
 
 /* base styling */
@@ -96,13 +120,13 @@ input[type="range"] {
 /* chrome/safari */
 input[type="range"]::-webkit-slider-runnable-track {
 	background: #ddd;
-	height: 4px;
+	height: 3px;
 }
 
 /* firefox */
 input[type="range"]::-moz-range-track {
 	background: #ddd;
-	height: 4px;
+	height: 3px;
 }
 
 input[type="range"]::-moz-range-progress {
@@ -114,18 +138,18 @@ input[type="range"]::-moz-range-progress {
 /* chrome/safari */
 input[type="range"]::-webkit-slider-thumb {
 	-webkit-appearance: none;
-	width: 16px;
-	height: 16px;
+	width: 12px;
+	height: 12px;
 	background: #666;
 	border-radius: 50%;
-	margin-top: -6px;
+	margin-top: -4.5px;
 	cursor: pointer;
 }
 
 /* firefox */
 input[type="range"]::-moz-range-thumb {
-	width: 16px;
-	height: 16px;
+	width: 12px;
+	height: 12px;
 	background: #666;
 	border-radius: 50%;
 	border: none;
@@ -137,7 +161,7 @@ input[type="range"]::-moz-range-thumb {
 /* container for two overlapping range inputs */
 .range-slider {
 	position: relative;
-	height: 20px;
+	height: 16px;
 }
 
 /* position both sliders on top of each other */
