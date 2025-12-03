@@ -35,22 +35,26 @@ body {
 	font-size: 13px;
 }
 
-.filter-group {
+/* single filter container */
+.filter-item {
 	display: flex;
 	flex-direction: column;
 	gap: 2px;
 }
 
-.filter-top-row {
+/* both rows use flexbox with gap */
+.label-and-value,
+.reset-and-slider {
 	display: flex;
-	justify-content: space-between;
-	align-items: baseline;
 	gap: 4px;
 }
 
-.filter-bottom-row {
-	display: flex;
-	gap: 4px;
+.label-and-value {
+	justify-content: space-between;
+	align-items: baseline;
+}
+
+.reset-and-slider {
 	align-items: center;
 }
 
@@ -61,7 +65,7 @@ body {
 	flex-shrink: 0;
 }
 
-.filter-bottom-row button {
+.reset-and-slider button {
 	flex-shrink: 0;
 	padding: 2px 6px;
 	font-size: 10px;
@@ -69,21 +73,20 @@ body {
 	width: 50px;
 }
 
-.filter-bottom-row input[type="range"] {
+.reset-and-slider input[type="range"],
+.reset-and-slider .range-slider {
 	flex: 1;
 }
 
-.filter-bottom-row .range-slider {
-	flex: 1;
-}
-
+/* labels for dropdowns */
 .filter-section label {
 	font-size: 11px;
 	margin-top: 2px;
 	margin-bottom: 2px;
 }
 
-.temp-row {
+/* displays min-max values for double ended sliders */
+.double-slider-values {
 	display: flex;
 	gap: 4px;
 	align-items: baseline;
@@ -96,112 +99,9 @@ body {
 	font-size: 11px;
 }
 
-.filter-top-row > span {
-	font-size: 11px;
-}
 
-button {
-	padding: 5px 8px;
-	cursor: pointer;
-	border: 1px solid #000;
-	background: #fff;
-	font-size: 11px;
-}
 
-select {
-	padding: 3px 5px;
-	border: 1px solid #000;
-	font-size: 11px;
-}
-
-input[type="date"] {
-	padding: 2px 4px;
-	border: 1px solid #000;
-	font-size: 10px;
-}
-
-/* base styling */
-input[type="range"] {
-	width: 100%;
-	-webkit-appearance: none;
-	background: transparent;
-}
-
-/* track/bar styling */
-
-/* chrome/safari */
-input[type="range"]::-webkit-slider-runnable-track {
-	background: #ddd;
-	height: 3px;
-}
-
-/* firefox */
-input[type="range"]::-moz-range-track {
-	background: #ddd;
-	height: 3px;
-}
-
-input[type="range"]::-moz-range-progress {
-	background: transparent;
-}
-
-/* draggable circle */
-
-/* chrome/safari */
-input[type="range"]::-webkit-slider-thumb {
-	-webkit-appearance: none;
-	width: 12px;
-	height: 12px;
-	background: #666;
-	border-radius: 50%;
-	margin-top: -4.5px;
-	cursor: pointer;
-}
-
-/* firefox */
-input[type="range"]::-moz-range-thumb {
-	width: 12px;
-	height: 12px;
-	background: #666;
-	border-radius: 50%;
-	border: none;
-	cursor: pointer;
-}
-
-/* two ended slider*/
-
-/* container for two overlapping range inputs */
-.range-slider {
-	position: relative;
-	height: 16px;
-}
-
-/* position both sliders on top of each other */
-.range-slider input[type="range"] {
-	position: absolute;
-	pointer-events: none; /*no mouse event on slider*/
-}
-
-/*  mouse only on the draggable circle chrome safari */
-.range-slider input[type="range"]::-webkit-slider-thumb {
-	pointer-events: auto;
-	z-index: 3;
-}
-
-/* mouse only on the draggable circle firefox */
-.range-slider input[type="range"]::-moz-range-thumb {
-	pointer-events: auto;
-}
-
-/* hide track on second slider so it doesn't cover the first thumb */
-.range-slider input[type="range"]:nth-child(2)::-webkit-slider-runnable-track {
-	background: transparent;
-}
-
-.range-slider input[type="range"]:nth-child(2)::-moz-range-track {
-	background: transparent;
-}
-
+/* crash counter styling */
 #crashCounter {
 	position: fixed;
 	top: 20px;
