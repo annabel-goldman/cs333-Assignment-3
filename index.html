@@ -138,7 +138,7 @@
 		<h3>TIME</h3>
 		<div class="filter-group">
 			<div class="filter-top-row">
-				<label class="filter-label">Start Time</label>
+				<label class="filter-label">Time of Day</label>
 				<span id="timeDisplay">12:00 AM</span>
 			</div>
 			<div class="filter-bottom-row">
@@ -146,6 +146,33 @@
 				<input id="startTimeSlider" type="range" min="0" max="23" value="0" step="1" />
 			</div>
 		</div>
+		<div class="filter-group">
+			<div class="filter-top-row">
+				<label class="filter-label">Start Date</label>
+				<span id="startDateDisplay">All</span>
+			</div>
+			<div class="filter-bottom-row">
+				<button id="resetStartDateBtn">Reset</button>
+				<input id="startDateInput" type="date" min="2023-01-01" max="2023-03-31" />
+			</div>
+		</div>
+		<div class="filter-group">
+			<div class="filter-top-row">
+				<label class="filter-label">End Date</label>
+				<span id="endDateDisplay">All</span>
+			</div>
+			<div class="filter-bottom-row">
+				<button id="resetEndDateBtn">Reset</button>
+				<input id="endDateInput" type="date" min="2023-01-01" max="2023-03-31" />
+			</div>
+		</div>
+		
+		<label for="dayNightFilter">Day vs Night</label>
+		<select id="dayNightFilter">
+			<option value="all">All</option>
+			<option value="Day">Day</option>
+			<option value="Night">Night</option>
+		</select>
 	</div>
 
 	<div class="filter-section">
@@ -160,7 +187,27 @@
 				<input id="severitySlider" type="range" min="0" max="2" value="0" step="1" />
 			</div>
 		</div>
+		
+		<label for="poiFilter">Points of Interest</label>
+		<select id="poiFilter">
+			<option value="all">All</option>
+			<option value="amenity">Amenity</option>
+			<option value="bump">Bump</option>
+			<option value="crossing">Crossing</option>
+			<option value="giveway">Give Way</option>
+			<option value="junction">Junction</option>
+			<option value="railway">Railway</option>
+			<option value="roundabout">Roundabout</option>
+			<option value="station">Station</option>
+			<option value="stop">Stop</option>
+			<option value="traffic_calming">Traffic Calming</option>
+			<option value="traffic_signal">Traffic Signal</option>
+		</select>
 	</div>
+		</div>
+		<div id="crashCounter">
+			<span id="crashCount">0</span>
+			<div>crashes displayed</div>
 		</div>
 		<svg></svg>
 	</body>
@@ -197,6 +244,8 @@
 	let allPoints = [];
 	let mapFeatures = [];
 	let currentWindDirection = 'all';
+	let currentPOI = 'all';
+	let currentDayNight = 'all';
 	let currentSeverity = 'all';
 	let currentTime = 0;
 	let currentMinTemp = 25;
@@ -212,6 +261,9 @@
 	let currentMinWindChill = 23;
 	let currentMaxWindChill = 89;
 	let filterByTime = false;
+	let filterByDate = false;
+	let currentStartDate = null;
+	let currentEndDate = null;
 	let filterBySeverity = false;
 	let filterByTemp = false;
 	let filterByHumidity = false;
@@ -396,28 +448,49 @@
 		function updateAndFilterPoints() {
 			let filteredPoints = allPoints;
 
-			//filter by wind direction
-			if (currentWindDirection !== 'all') {
-				filteredPoints = filteredPoints.filter(
-					(point) => point.properties.winddirection === currentWindDirection
-				);
-			}
+		//filter by wind direction
+		if (currentWindDirection !== 'all') {
+			filteredPoints = filteredPoints.filter(
+				(point) => point.properties.winddirection === currentWindDirection
+			);
+		}
 
-			//filter by severity if filtering enabled
+		if (currentPOI !== 'all') {
+			filteredPoints = filteredPoints.filter(
+				(point) => point.properties[currentPOI] === true
+			);
+		}
+
+		if (currentDayNight !== 'all') {
+			filteredPoints = filteredPoints.filter(
+				(point) => point.properties.sunrise_sunset === currentDayNight
+			);
+		}
+
+		//filter by severity if filtering enabled
 			if (filterBySeverity) {
 				filteredPoints = filteredPoints.filter((point) => {
 					return point.properties.severity === currentSeverity;
 				});
 			}
 
-			//filter by starttime if filtering enabled
-			if (filterByTime) {
-				filteredPoints = filteredPoints.filter((point) => {
-					const timeString = point.properties.starttime;
-					const hour = parseInt(timeString.split(' ')[1].split(':')[0]);
-					return hour === currentTime;
-				});
-			}
+		//filter by starttime if filtering enabled
+		if (filterByTime) {
+			filteredPoints = filteredPoints.filter((point) => {
+				const timeString = point.properties.starttime;
+				const hour = parseInt(timeString.split(' ')[1].split(':')[0]);
+				return hour === currentTime;
+			});
+		}
+
+		if (filterByDate) {
+			filteredPoints = filteredPoints.filter((point) => {
+				const date = point.properties.starttime.split(' ')[0];
+				if (currentStartDate && date < currentStartDate) return false;
+				if (currentEndDate && date > currentEndDate) return false;
+				return true;
+			});
+		}
 
 		//filter by temperature if filtering enabled
 		if (filterByTemp) {
@@ -462,19 +535,30 @@
 		});
 	}
 
+	d3.select('#crashCount').text(filteredPoints.length.toLocaleString());
+
 	// Use requestAnimationFrame for smooth rendering
 		requestAnimationFrame(() => {
 			renderPoints(filteredPoints);
 		});
 	}
 
-		// connect the dropdown menu to the visualization
-		function setupFilter() {
-			d3.select('#windDirectionFilter').on('change', function () {
-				currentWindDirection = this.value;
-				updateAndFilterPoints();
-			});
-		}
+	function setupFilter() {
+		d3.select('#windDirectionFilter').on('change', function () {
+			currentWindDirection = this.value;
+			updateAndFilterPoints();
+		});
+
+		d3.select('#poiFilter').on('change', function () {
+			currentPOI = this.value;
+			updateAndFilterPoints();
+		});
+
+		d3.select('#dayNightFilter').on('change', function () {
+			currentDayNight = this.value;
+			updateAndFilterPoints();
+		});
+	}
 
 	function setupSliders() {
 		d3.select('#severitySlider').on('input', function () {
@@ -516,6 +600,24 @@
 
 			const displayText = displayHour + ':00 ' + period;
 			d3.select('#timeDisplay').text(displayText);
+			updateAndFilterPoints();
+		});
+
+		d3.select('#startDateInput').on('change', function () {
+			currentStartDate = this.value;
+			if (currentStartDate || currentEndDate) {
+				filterByDate = true;
+			}
+			d3.select('#startDateDisplay').text(currentStartDate || 'All');
+			updateAndFilterPoints();
+		});
+
+		d3.select('#endDateInput').on('change', function () {
+			currentEndDate = this.value;
+			if (currentStartDate || currentEndDate) {
+				filterByDate = true;
+			}
+			d3.select('#endDateDisplay').text(currentEndDate || 'All');
 			updateAndFilterPoints();
 		});
 
@@ -722,6 +824,8 @@
 	function setupButtons() {
 	d3.select('#resetAllBtn').on('click', function () {
 		currentWindDirection = 'all';
+		currentPOI = 'all';
+		currentDayNight = 'all';
 		currentSeverity = 'all';
 		currentTime = 0;
 		currentMinTemp = 25;
@@ -737,6 +841,7 @@
 	currentMinWindChill = 23;
 	currentMaxWindChill = 89;
 	filterByTime = false;
+	filterByDate = false;
 	filterBySeverity = false;
 	filterByTemp = false;
 	filterByHumidity = false;
@@ -744,12 +849,20 @@
 	filterByPressure = false;
 	filterByVisibility = false;
 	filterByWindChill = false;
+	currentStartDate = null;
+	currentEndDate = null;
 
 		d3.select('#windDirectionFilter').property('value', 'all');
+		d3.select('#poiFilter').property('value', 'all');
+		d3.select('#dayNightFilter').property('value', 'all');
 		d3.select('#severitySlider').node().value = 0;
 		d3.select('#severityDisplay').text('All');
 		d3.select('#startTimeSlider').node().value = 0;
 		d3.select('#timeDisplay').text('12:00 AM');
+		d3.select('#startDateInput').node().value = '';
+		d3.select('#endDateInput').node().value = '';
+		d3.select('#startDateDisplay').text('All');
+		d3.select('#endDateDisplay').text('All');
 		d3.select('#minTempSlider').node().value = 25;
 		d3.select('#maxTempSlider').node().value = 90;
 		d3.select('#minTempDisplay').text('25°F');
@@ -795,6 +908,26 @@
 			d3.select('#startTimeSlider').node().value = 0;
 			d3.select('#timeDisplay').text('12:00 AM');
 
+			updateAndFilterPoints();
+		});
+
+		d3.select('#resetStartDateBtn').on('click', function () {
+			currentStartDate = null;
+			d3.select('#startDateInput').node().value = '';
+			d3.select('#startDateDisplay').text('All');
+			if (!currentStartDate && !currentEndDate) {
+				filterByDate = false;
+			}
+			updateAndFilterPoints();
+		});
+
+		d3.select('#resetEndDateBtn').on('click', function () {
+			currentEndDate = null;
+			d3.select('#endDateInput').node().value = '';
+			d3.select('#endDateDisplay').text('All');
+			if (!currentStartDate && !currentEndDate) {
+				filterByDate = false;
+			}
 			updateAndFilterPoints();
 		});
 
