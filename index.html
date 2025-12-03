@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="input-styles.css" />
 
 <body>
+	<h1>Florida Car Crashes from June to March 2023</h1>
 	<div id="controls">
 		<button id="resetAllBtn">Reset all filters</button>
 
@@ -231,7 +232,7 @@
 	var projection = d3
 		.geoAlbersUsa()
 		.scale(4000)
-		.translate([width / 20 - width / 3, height / 20 - height / 2]);
+		.translate([width / 15 - width /2, height / 60 - height / 2]);
 
 	//geopath coverts geojson geometry to svg path
 	//projection here is func we use to convert geometry points into svg points
