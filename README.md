@@ -52,6 +52,9 @@ https://d3js.org/d3-geo/path
 https://www.geeksforgeeks.org/html/how-to-add-a-range-slider-using-html/
 https://stackoverflow.com/questions/18389224/how-to-style-html5-range-input-to-have-different-color-before-and-after-slider
 https://jsfiddle.net/esyvws3d/
+https://stackoverflow.com/questions/4753946/html-slider-with-two-inputs-possible
+https://codepen.io/vsync/pen/mdEJMLv
+
 
 
 

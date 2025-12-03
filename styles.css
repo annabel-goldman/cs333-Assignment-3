@@ -33,17 +33,18 @@ body {
 #controls {
     display: flex;
     flex-direction: column;
-	gap: 15px;
-	padding: 20px;
+	gap: 8px;
+	padding: 15px;
 	width: 200px;
+	font-size: 12px;
 }
 
 .filter-section {
 	border: 2px solid #000;
-	padding: 10px;
+	padding: 8px;
 	display: flex;
 	flex-direction: column;
-	gap: 8px;
+	gap: 6px;
 }
 
 .filter-section h3 {
@@ -52,23 +53,71 @@ body {
 	text-align: center;
 	border-bottom: 2px solid #000;
 	padding-bottom: 5px;
+	font-size: 13px;
+}
+
+.filter-group {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.filter-top-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+	gap: 8px;
+}
+
+.filter-bottom-row {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+}
+
+.filter-label {
+	font-size: 11px;
+	font-weight: normal;
+	margin: 0;
+	flex-shrink: 0;
+}
+
+.filter-bottom-row button {
+	flex-shrink: 0;
+	padding: 3px 8px;
+	font-size: 10px;
+	white-space: nowrap;
+	width: 50px;
+}
+
+.filter-bottom-row input[type="range"] {
+	flex: 1;
+}
+
+.filter-bottom-row .range-slider {
+	flex: 1;
 }
 
 .filter-section label {
-	font-size: 14px;
+	font-size: 11px;
 	margin-top: 5px;
 }
 
-.time-row,
-.severity-row {
+.temp-row {
 	display: flex;
-	justify-content: space-between;
-	align-items: center;
+	gap: 4px;
+	align-items: baseline;
+	font-size: 11px;
+	white-space: nowrap;
 }
 
 #timeDisplay,
 #severityDisplay {
-	font-size: 14px;
+	font-size: 11px;
+}
+
+.filter-top-row > span {
+	font-size: 11px;
 }
 
 button {
@@ -76,49 +125,94 @@ button {
 	cursor: pointer;
 	border: 1px solid #000;
 	background: #fff;
+	font-size: 11px;
 }
 
 select {
 	padding: 5px;
 	border: 1px solid #000;
+	font-size: 11px;
 }
 
+/* base styling */
 input[type="range"] {
 	width: 100%;
 	-webkit-appearance: none;
 	background: transparent;
 }
 
+/* track/bar styling */
+
+/* chrome/safari */
 input[type="range"]::-webkit-slider-runnable-track {
 	background: #ddd;
-	height: 4px;
+	height: 3px;
 }
 
+/* firefox */
+input[type="range"]::-moz-range-track {
+	background: #ddd;
+	height: 3px;
+}
+
+input[type="range"]::-moz-range-progress {
+	background: transparent;
+}
+
+/* draggable circle */
+
+/* chrome/safari */
 input[type="range"]::-webkit-slider-thumb {
 	-webkit-appearance: none;
-	width: 16px;
-	height: 16px;
+	width: 12px;
+	height: 12px;
 	background: #666;
 	border-radius: 50%;
-	margin-top: -6px;
+	margin-top: -4.5px;
 	cursor: pointer;
 }
 
-input[type="range"]::-moz-range-track {
-	background: #ddd;
-	height: 4px;
-}
-
+/* firefox */
 input[type="range"]::-moz-range-thumb {
-	width: 16px;
-	height: 16px;
+	width: 12px;
+	height: 12px;
 	background: #666;
 	border-radius: 50%;
 	border: none;
 	cursor: pointer;
 }
 
-input[type="range"]::-moz-range-progress {
+/* two ended slider*/
+
+/* container for two overlapping range inputs */
+.range-slider {
+	position: relative;
+	height: 16px;
+}
+
+/* position both sliders on top of each other */
+.range-slider input[type="range"] {
+	position: absolute;
+	pointer-events: none; /*no mouse event on slider*/
+}
+
+/*  mouse only on the draggable circle chrome safari */
+.range-slider input[type="range"]::-webkit-slider-thumb {
+	pointer-events: auto;
+	z-index: 3;
+}
+
+/* mouse only on the draggable circle firefox */
+.range-slider input[type="range"]::-moz-range-thumb {
+	pointer-events: auto;
+}
+
+/* hide track on second slider so it doesn't cover the first thumb */
+.range-slider input[type="range"]:nth-child(2)::-webkit-slider-runnable-track {
+	background: transparent;
+}
+
+.range-slider input[type="range"]:nth-child(2)::-moz-range-track {
 	background: transparent;
 }
 
