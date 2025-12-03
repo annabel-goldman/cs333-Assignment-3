@@ -271,7 +271,6 @@
 	let filterByPressure = false;
 	let filterByVisibility = false;
 	let filterByWindChill = false;
-	let isZooming = false;
 
 		// creating a tooltip
 		var tooltip = d3
@@ -284,33 +283,14 @@
 			.style('border-width', '1px')
 			.style('padding', '10px');
 
-		// Create the zoom handler and optimize it with throttling
+		// Create the zoom handler
 		var zoom = d3
 			.zoom()
 			.scaleExtent([1, 8]) // zoom ranges from minimum of 1x to maximum of 8x
-			.filter(function (event) {
-				// Allow wheel events to be passive when possible
-				return !event.ctrlKey && !event.button;
-			})
-			.on(
-				'start',
-				function () {
-					isZooming = true;
-					tooltip.style('visibility', 'hidden');
-				},
-				16
-			) // 60 fps throttling
-			.on(
-				'zoom',
-				throttle(function (event) {
-					currentTransform = event.transform;
-					statesLayer.attr('transform', currentTransform);
-					crashesLayer.attr('transform', currentTransform);
-				}, 16)
-			)
-			.on('end', function () {
-				isZooming = false;
-				tooltip.style('visibility', 'visible');
+			.on('zoom', function (event) {
+				currentTransform = event.transform;
+				statesLayer.attr('transform', currentTransform);
+				crashesLayer.attr('transform', currentTransform);
 			});
 
 		// ------------------------ LOAD IN AND PRE-PROCESS DATA ------------------------
@@ -333,27 +313,16 @@
 					.then(function (points) {
 						allPoints = points.features;
 
-						// pre-calculate projections for all crash points
 						allPoints.forEach((point, index) => {
-							// creating a new property for each point so that we can save their projection and render them much faster later
-							point.projected = projection(point.geometry.coordinates);
-
 							if (
 								point.properties.id === null ||
 								point.properties.id === undefined
 							) {
 								point.properties.id = index;
 							}
-
-							return point;
 						});
 
-						allPoints = allPoints.filter((point) => point.projected !== null);
-
-						// Initial render with requestAnimationFrame for better performance
-						requestAnimationFrame(() => {
-							updateAndFilterPoints();
-						});
+						updateAndFilterPoints();
 					})
 					.catch((error) => {
 						console.log('Error loading in FLdata.json:', error);
@@ -362,27 +331,6 @@
 			.catch((error) => {
 				console.log('Error loading in FLmap.json:', error);
 			});
-
-		// ------------------------ OPTIMIZING PERFORMANCE ------------------------
-		// Throttle function to limit function calls
-		function throttle(func, delay) {
-			let timeoutId;
-			let lastExecTime = 0;
-			return function (...args) {
-				const currentTime = Date.now();
-
-				if (currentTime - lastExecTime > delay) {
-					func.apply(this, args);
-					lastExecTime = currentTime;
-				} else {
-					clearTimeout(timeoutId);
-					timeoutId = setTimeout(() => {
-						func.apply(this, args);
-						lastExecTime = Date.now();
-					}, delay - (currentTime - lastExecTime));
-				}
-			};
-		}
 
 		//  ------------------------ SET UP  helpers  --------------------------
 
@@ -409,12 +357,15 @@
 			// Update existing and new circles
 			circles
 				.merge(newCircles)
-				.attr('cx', (d) => d.projected[0])
-				.attr('cy', (d) => d.projected[1])
+				.attr('cx', (d) => {
+					const coords = projection(d.geometry.coordinates);
+					return coords ? coords[0] : 0;
+				})
+				.attr('cy', (d) => {
+					const coords = projection(d.geometry.coordinates);
+					return coords ? coords[1] : 0;
+				})
 				.on('mouseover', function (event, d) {
-					// Disable hover during zoom for performance
-					if (isZooming) return;
-
 					d3.select(this)
 						.attr('fill', 'red')
 						.attr('stroke', 'red')
@@ -537,10 +488,7 @@
 
 	d3.select('#crashCount').text(filteredPoints.length.toLocaleString());
 
-	// Use requestAnimationFrame for smooth rendering
-		requestAnimationFrame(() => {
-			renderPoints(filteredPoints);
-		});
+	renderPoints(filteredPoints);
 	}
 
 	function setupFilter() {
