@@ -2,17 +2,23 @@
 
 ## How to Run this Project Locally
 1. Clone this repository
+2. Run `python -m http.server` in the root of this project.
+3. Go to `localhost:8000`
+
+
+## How to run Data Cleaning Locally
+1. Clone this repository
 2. Install Anaconda or MiniConda: 
     https://www.anaconda.com/download 
     https://www.anaconda.com/docs/getting-started/miniconda/install
 3. Open a terminal at the root of the cloned repository and run `conda env create -f environment.yml`.
-3. Once the conda environment has been created, run `conda activate datacleaning`.
-4. Obtain a csv file of our data set avalible at  
+4. Once the conda environment has been created, run `conda activate datacleaning`.
+5. Obtain a csv file of our data set avalible at  
     https://www.kaggle.com/datasets/sobhanmoosavi/us-accidents/data
-5. Put the CSV file into the root of our repository and rename it "data.csv"
-6. Run the jyptr notebook code 
-7. Run `python -m http.server` in the root of this project.
-8. Go to `localhost:8000`
+6. Put the CSV file into the root of our repository and rename it "data.csv"
+7. Run the jyptr notebook code 
+8. Run `python -m http.server` in the root of this project.
+9. Go to `localhost:8000`
 
 
 ## References Used
