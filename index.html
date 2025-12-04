@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html>
-	<meta charset="utf-8" />
-	<link rel="stylesheet" href="styles.css" />
+<meta charset="utf-8" />
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="input-styles.css" />
 
-	<body>
-		<div id="controls">
-			<button id="resetAllBtn">Reset all filters</button>
-			
+<body>
+	<h1>Florida Car Crashes from June to March 2023</h1>
+	<div id="controls">
+		<button id="resetAllBtn">Reset all filters</button>
+
 		<div class="filter-section">
 			<h3>WEATHER</h3>
 			<label for="windDirectionFilter">Wind Direction</label>
@@ -23,17 +25,17 @@
 				<option value="CALM">Calm</option>
 				<option value="VAR">Variable</option>
 			</select>
-			
-		<div class="filter-group">
-			<div class="filter-top-row">
+
+		<div class="filter-item">
+			<div class="label-and-value">
 				<label class="filter-label">Temperature (°F)</label>
-				<div class="temp-row">
+				<div class="double-slider-values">
 					<span id="minTempDisplay">25°F</span>
 					<span>-</span>
 					<span id="maxTempDisplay">90°F</span>
 				</div>
 			</div>
-			<div class="filter-bottom-row">
+			<div class="reset-and-slider">
 				<button id="showAllTempsBtn">Reset</button>
 				<div class="range-slider">
 					<input id="minTempSlider" type="range" min="25" max="90" value="25" step="1" />
@@ -41,17 +43,17 @@
 				</div>
 			</div>
 		</div>
-		
-		<div class="filter-group">
-			<div class="filter-top-row">
+
+		<div class="filter-item">
+			<div class="label-and-value">
 				<label class="filter-label">Humidity (%)</label>
-				<div class="temp-row">
+				<div class="double-slider-values">
 					<span id="minHumidityDisplay">18%</span>
 					<span>-</span>
 					<span id="maxHumidityDisplay">100%</span>
 				</div>
 			</div>
-			<div class="filter-bottom-row">
+			<div class="reset-and-slider">
 				<button id="showAllHumidityBtn">Reset</button>
 				<div class="range-slider">
 					<input id="minHumiditySlider" type="range" min="18" max="100" value="18" step="1" />
@@ -59,17 +61,17 @@
 				</div>
 			</div>
 		</div>
-		
-		<div class="filter-group">
-			<div class="filter-top-row">
+
+		<div class="filter-item">
+			<div class="label-and-value">
 				<label class="filter-label">Precipitation (in)</label>
-				<div class="temp-row">
+				<div class="double-slider-values">
 					<span id="minPrecipDisplay">0.0"</span>
 					<span>-</span>
 					<span id="maxPrecipDisplay">1.34"</span>
 				</div>
 			</div>
-			<div class="filter-bottom-row">
+			<div class="reset-and-slider">
 				<button id="showAllPrecipBtn">Reset</button>
 				<div class="range-slider">
 					<input id="minPrecipSlider" type="range" min="0" max="1.34" value="0" step="0.01" />
@@ -77,17 +79,17 @@
 				</div>
 			</div>
 		</div>
-		
-		<div class="filter-group">
-			<div class="filter-top-row">
+
+		<div class="filter-item">
+			<div class="label-and-value">
 				<label class="filter-label">Pressure (in)</label>
-				<div class="temp-row">
+				<div class="double-slider-values">
 					<span id="minPressureDisplay">20.11"</span>
 					<span>-</span>
 					<span id="maxPressureDisplay">30.41"</span>
 				</div>
 			</div>
-			<div class="filter-bottom-row">
+			<div class="reset-and-slider">
 				<button id="showAllPressureBtn">Reset</button>
 				<div class="range-slider">
 					<input id="minPressureSlider" type="range" min="20.11" max="30.41" value="20.11" step="0.01" />
@@ -95,17 +97,17 @@
 				</div>
 			</div>
 		</div>
-		
-		<div class="filter-group">
-			<div class="filter-top-row">
+
+		<div class="filter-item">
+			<div class="label-and-value">
 				<label class="filter-label">Visibility (mi)</label>
-				<div class="temp-row">
+				<div class="double-slider-values">
 					<span id="minVisibilityDisplay">0 mi</span>
 					<span>-</span>
 					<span id="maxVisibilityDisplay">10 mi</span>
 				</div>
 			</div>
-			<div class="filter-bottom-row">
+			<div class="reset-and-slider">
 				<button id="showAllVisibilityBtn">Reset</button>
 				<div class="range-slider">
 					<input id="minVisibilitySlider" type="range" min="0" max="10" value="0" step="0.1" />
@@ -113,17 +115,17 @@
 				</div>
 			</div>
 		</div>
-		
-		<div class="filter-group">
-			<div class="filter-top-row">
+
+		<div class="filter-item">
+			<div class="label-and-value">
 				<label class="filter-label">Wind Chill (°F)</label>
-				<div class="temp-row">
+				<div class="double-slider-values">
 					<span id="minWindChillDisplay">23°F</span>
 					<span>-</span>
 					<span id="maxWindChillDisplay">89°F</span>
 				</div>
 			</div>
-			<div class="filter-bottom-row">
+			<div class="reset-and-slider">
 				<button id="showAllWindChillBtn">Reset</button>
 				<div class="range-slider">
 					<input id="minWindChillSlider" type="range" min="23" max="89" value="23" step="1" />
@@ -131,72 +133,123 @@
 				</div>
 			</div>
 		</div>
-		
-</div>
-			
-	<div class="filter-section">
-		<h3>TIME</h3>
-		<div class="filter-group">
-			<div class="filter-top-row">
-				<label class="filter-label">Start Time</label>
+
+		</div>
+
+		<div class="filter-section">
+			<h3>TIME</h3>
+		<div class="filter-item">
+			<div class="label-and-value">
+				<label class="filter-label">Time of Day</label>
 				<span id="timeDisplay">12:00 AM</span>
 			</div>
-			<div class="filter-bottom-row">
+			<div class="reset-and-slider">
 				<button id="showAllTimesBtn">Reset</button>
 				<input id="startTimeSlider" type="range" min="0" max="23" value="0" step="1" />
 			</div>
 		</div>
-	</div>
+		<div class="filter-item">
+			<div class="label-and-value">
+				<label class="filter-label">Start Date</label>
+				<span id="startDateDisplay">All</span>
+			</div>
+			<div class="reset-and-slider">
+				<button id="resetStartDateBtn">Reset</button>
+				<input id="startDateInput" type="date" min="2023-01-01" max="2023-03-31" />
+			</div>
+		</div>
+		<div class="filter-item">
+			<div class="label-and-value">
+				<label class="filter-label">End Date</label>
+				<span id="endDateDisplay">All</span>
+			</div>
+			<div class="reset-and-slider">
+				<button id="resetEndDateBtn">Reset</button>
+				<input id="endDateInput" type="date" min="2023-01-01" max="2023-03-31" />
+			</div>
+		</div>
 
-	<div class="filter-section">
-		<h3>META DATA</h3>
-		<div class="filter-group">
-			<div class="filter-top-row">
+			<label for="dayNightFilter">Day vs Night</label>
+			<select id="dayNightFilter">
+				<option value="all">All</option>
+				<option value="Day">Day</option>
+				<option value="Night">Night</option>
+			</select>
+		</div>
+
+		<div class="filter-section">
+			<h3>META DATA</h3>
+		<div class="filter-item">
+			<div class="label-and-value">
 				<label class="filter-label">Severity</label>
 				<span id="severityDisplay">All</span>
 			</div>
-			<div class="filter-bottom-row">
+			<div class="reset-and-slider">
 				<button id="showAllSeveritiesBtn">Reset</button>
 				<input id="severitySlider" type="range" min="0" max="2" value="0" step="1" />
 			</div>
 		</div>
+
+			<label for="poiFilter">Points of Interest</label>
+			<select id="poiFilter">
+				<option value="all">All</option>
+				<option value="amenity">Amenity</option>
+				<option value="bump">Bump</option>
+				<option value="crossing">Crossing</option>
+				<option value="giveway">Give Way</option>
+				<option value="junction">Junction</option>
+				<option value="railway">Railway</option>
+				<option value="roundabout">Roundabout</option>
+				<option value="station">Station</option>
+				<option value="stop">Stop</option>
+				<option value="traffic_calming">Traffic Calming</option>
+				<option value="traffic_signal">Traffic Signal</option>
+			</select>
+		</div>
 	</div>
+	<div id="visualization-container">
+		<div id="crashCounter">
+			<span id="crashCount">0</span>
+			<div>crashes displayed</div>
 		</div>
 		<svg></svg>
-	</body>
+	</div>
+</body>
 
-	<script src="https://d3js.org/d3.v6.min.js"></script>
+<script src="https://d3js.org/d3.v6.min.js"></script>
 
-	<script>
-		// ------------------------ SET UP canvas --------------------------
-		var margin = { top: 20, right: 20, bottom: 20, left: 20 },
-			width = window.innerWidth - margin.left - margin.right,
-			height = window.innerHeight - margin.top - margin.bottom;
+<script>
+	// ------------------------ SET UP canvas --------------------------
+	var margin = { top: 20, right: 20, bottom: 20, left: 20 },
+		width = window.innerWidth - margin.left - margin.right,
+		height = window.innerHeight - margin.top - margin.bottom;
 
-		var svg = d3
-			.select('svg')
-			.attr('width', width + margin.left + margin.right)
-			.attr('height', height + margin.top + margin.bottom);
+	var svg = d3
+		.select('svg')
+		.attr('width', width + margin.left + margin.right)
+		.attr('height', height + margin.top + margin.bottom);
 
-		// ------------------------ SET UP MAP LAYER --------------------------
-		//projection coverts geojson coords to svg coords
-		var projection = d3
-			.geoAlbersUsa()
-			.scale(4000)
-			.translate([width / 20 - width / 3, height / 20 - height / 2]);
+	// ------------------------ SET UP MAP LAYER --------------------------
+	//projection coverts geojson coords to svg coords
+	var projection = d3
+		.geoAlbersUsa()
+		.scale(4000)
+		.translate([width / 15 - width /2, height / 60 - height / 2]);
 
-		//geopath coverts geojson geometry to svg path
-		//projection here is func we use to convert geometry points into svg points
-		var path = d3.geoPath().projection(projection);
+	//geopath coverts geojson geometry to svg path
+	//projection here is func we use to convert geometry points into svg points
+	var path = d3.geoPath().projection(projection);
 
-		var statesLayer = svg.append('g').attr('class', 'states');
-		var crashesLayer = svg.append('g').attr('class', 'crashes');
+	var statesLayer = svg.append('g').attr('class', 'states');
+	var crashesLayer = svg.append('g').attr('class', 'crashes');
 
 	// ------------------------ INITIAL STATE OF GLOBAL VARIABLES ------------------------
 
 	let allPoints = [];
 	let mapFeatures = [];
 	let currentWindDirection = 'all';
+	let currentPOI = 'all';
+	let currentDayNight = 'all';
 	let currentSeverity = 'all';
 	let currentTime = 0;
 	let currentMinTemp = 25;
@@ -212,6 +265,9 @@
 	let currentMinWindChill = 23;
 	let currentMaxWindChill = 89;
 	let filterByTime = false;
+	let filterByDate = false;
+	let currentStartDate = null;
+	let currentEndDate = null;
 	let filterBySeverity = false;
 	let filterByTemp = false;
 	let filterByHumidity = false;
@@ -219,207 +275,178 @@
 	let filterByPressure = false;
 	let filterByVisibility = false;
 	let filterByWindChill = false;
-	let isZooming = false;
 
-		// creating a tooltip
-		var tooltip = d3
-			.select('body')
-			.append('div')
-			.style('position', 'absolute')
-			.style('visibility', 'hidden')
-			.style('background-color', 'white')
-			.style('border', 'solid')
-			.style('border-width', '1px')
-			.style('padding', '10px');
+	// creating a tooltip
+	var tooltip = d3
+		.select('body')
+		.append('div')
+		.style('position', 'absolute')
+		.style('visibility', 'hidden')
+		.style('background-color', 'white')
+		.style('border', 'solid')
+		.style('border-width', '1px')
+		.style('padding', '10px');
 
-		// Create the zoom handler and optimize it with throttling
-		var zoom = d3
-			.zoom()
-			.scaleExtent([1, 8]) // zoom ranges from minimum of 1x to maximum of 8x
-			.filter(function (event) {
-				// Allow wheel events to be passive when possible
-				return !event.ctrlKey && !event.button;
-			})
-			.on(
-				'start',
-				function () {
-					isZooming = true;
-					tooltip.style('visibility', 'hidden');
-				},
-				16
-			) // 60 fps throttling
-			.on(
-				'zoom',
-				throttle(function (event) {
-					currentTransform = event.transform;
-					statesLayer.attr('transform', currentTransform);
-					crashesLayer.attr('transform', currentTransform);
-				}, 16)
-			)
-			.on('end', function () {
-				isZooming = false;
-				tooltip.style('visibility', 'visible');
-			});
+	// Create the zoom handler
+	var zoom = d3
+		.zoom()
+		.scaleExtent([1, 8]) // zoom ranges from minimum of 1x to maximum of 8x
+		.on('zoom', function (event) {
+			currentTransform = event.transform;
+			statesLayer.attr('transform', currentTransform);
+			crashesLayer.attr('transform', currentTransform);
+		});
 
-		// ------------------------ LOAD IN AND PRE-PROCESS DATA ------------------------
-		d3.json('FLmap.json')
-			.then(function (us) {
-				mapFeatures = us.features;
+	// ------------------------ LOAD IN DATA ------------------------
+	d3.json('FLmap.json')
+		.then(function (us) {
+			mapFeatures = us.features;
 
-				// draw the map first so that users can see something is being loaded in while they wait on the points
-				statesLayer
-					.selectAll('path') //inside of the svg layer we made we will select all paths (on first pass this is none)
-					.data(mapFeatures) //then we bind the path objects to our features
-					.enter()
-					.append('path') //styling for the path
-					.attr('d', path)
-					.attr('stroke', '#000000')
-					.attr('fill', '#ffffff')
-					.attr('opacity', 0.7);
-
-				d3.json('FLdata.json')
-					.then(function (points) {
-						allPoints = points.features;
-
-						// pre-calculate projections for all crash points
-						allPoints.forEach((point, index) => {
-							// creating a new property for each point so that we can save their projection and render them much faster later
-							point.projected = projection(point.geometry.coordinates);
-
-							if (
-								point.properties.id === null ||
-								point.properties.id === undefined
-							) {
-								point.properties.id = index;
-							}
-
-							return point;
-						});
-
-						allPoints = allPoints.filter((point) => point.projected !== null);
-
-						// Initial render with requestAnimationFrame for better performance
-						requestAnimationFrame(() => {
-							updateAndFilterPoints();
-						});
-					})
-					.catch((error) => {
-						console.log('Error loading in FLdata.json:', error);
-					});
-			})
-			.catch((error) => {
-				console.log('Error loading in FLmap.json:', error);
-			});
-
-		// ------------------------ OPTIMIZING PERFORMANCE ------------------------
-		// Throttle function to limit function calls
-		function throttle(func, delay) {
-			let timeoutId;
-			let lastExecTime = 0;
-			return function (...args) {
-				const currentTime = Date.now();
-
-				if (currentTime - lastExecTime > delay) {
-					func.apply(this, args);
-					lastExecTime = currentTime;
-				} else {
-					clearTimeout(timeoutId);
-					timeoutId = setTimeout(() => {
-						func.apply(this, args);
-						lastExecTime = Date.now();
-					}, delay - (currentTime - lastExecTime));
-				}
-			};
-		}
-
-		//  ------------------------ SET UP  helpers  --------------------------
-
-		// function that draws the circles based on a given dataset
-		function renderPoints(data) {
-			const renderData = data;
-
-			const circles = crashesLayer
-				.selectAll('circle')
-				.data(renderData, (d) => d.properties.id);
-
-			// Delete circles for data points that no longer exist
-			circles.exit().remove();
-
-			// Add new circles for new data points
-			const newCircles = circles
+			// draw the map first so that users can see something is being loaded in while they wait on the points
+			statesLayer
+				.selectAll('path') //inside of the svg layer we made we will select all paths (on first pass this is none)
+				.data(mapFeatures) //then we bind the path objects to our features
 				.enter()
-				.append('circle')
-				.attr('r', 1)
-				.attr('stroke', '#666666')
-				.attr('fill', '#888888')
+				.append('path') //styling for the path
+				.attr('d', path)
+				.attr('stroke', '#000000')
+				.attr('fill', '#ffffff')
 				.attr('opacity', 0.7);
 
-			// Update existing and new circles
-			circles
-				.merge(newCircles)
-				.attr('cx', (d) => d.projected[0])
-				.attr('cy', (d) => d.projected[1])
-				.on('mouseover', function (event, d) {
-					// Disable hover during zoom for performance
-					if (isZooming) return;
+			d3.json('FLdata.json')
+				.then(function (points) {
+					allPoints = points.features;
 
-					d3.select(this)
-						.attr('fill', 'red')
-						.attr('stroke', 'red')
-						.attr('r', 4);
+					allPoints.forEach((point, index) => {
+						if (
+							point.properties.id === null ||
+							point.properties.id === undefined
+						) {
+							point.properties.id = index;
+						}
+					});
 
-					tooltip.html(
-						`<b>Accident Details</b><br><b>Description:</b> ` +
-							d.properties.description +
-							`<br><b>Street:</b> ` +
-							d.properties.street +
-							`<br><b>County:</b> ` +
-							d.properties.county +
-							`<br><b>Zipcode:</b> ` +
-							d.properties.zipcode
-					);
-					tooltip
-						.style('visibility', 'visible')
-						.style('top', event.pageY - 15 + 'px')
-						.style('left', event.pageX + 15 + 'px');
+					updateAndFilterPoints();
 				})
-				.on('mouseout', function (event, d) {
-					d3.select(this)
-						.attr('stroke', '#666666')
-						.attr('fill', '#888888')
-						.attr('r', 1);
-
-					tooltip.style('visibility', 'hidden');
+				.catch((error) => {
+					console.log('Error loading in FLdata.json:', error);
 				});
+		})
+		.catch((error) => {
+			console.log('Error loading in FLmap.json:', error);
+		});
+
+	//  ------------------------ SET UP  helpers  --------------------------
+
+	// function that draws the circles based on a given dataset
+	function renderPoints(data) {
+		const renderData = data;
+
+		const circles = crashesLayer
+			.selectAll('circle')
+			.data(renderData, (d) => d.properties.id);
+
+		// delete circles for data points that no longer exist
+		circles.exit().remove();
+
+		// add new circles for new data points
+		const newCircles = circles
+			.enter()
+			.append('circle')
+			.attr('r', 1)
+			.attr('stroke', '#666666')
+			.attr('fill', '#888888')
+			.attr('opacity', 0.7);
+
+		// Update existing and new circles
+		circles
+			.merge(newCircles)
+			.attr('cx', (d) => {
+				const coords = projection(d.geometry.coordinates);
+				return coords ? coords[0] : 0;
+			})
+			.attr('cy', (d) => {
+				const coords = projection(d.geometry.coordinates);
+				return coords ? coords[1] : 0;
+			})
+			.on('mouseover', function (event, d) {
+				d3.select(this)
+					.attr('fill', 'red')
+					.attr('stroke', 'red')
+					.attr('r', 3);
+
+				tooltip.html(
+					`<b>Accident Details</b><br><b>Description:</b> ` +
+					d.properties.description +
+					`<br><b>Street:</b> ` +
+					d.properties.street +
+					`<br><b>County:</b> ` +
+					d.properties.county +
+					`<br><b>Zipcode:</b> ` +
+					d.properties.zipcode
+				);
+				tooltip
+					.style('visibility', 'visible')
+					.style('top', event.pageY - 15 + 'px')
+					.style('left', event.pageX + 15 + 'px');
+			})
+			.on('mouseout', function (event, d) {
+				d3.select(this)
+					.attr('stroke', '#666666')
+					.attr('fill', '#888888')
+					.attr('r', 1);
+
+				tooltip.style('visibility', 'hidden');
+			});
+	}
+
+	function updateAndFilterPoints() {
+		let filteredPoints = allPoints;
+
+		//dropdown filters
+		if (currentWindDirection !== 'all') {
+			filteredPoints = filteredPoints.filter(
+				(point) => point.properties.winddirection === currentWindDirection
+			);
 		}
 
-		function updateAndFilterPoints() {
-			let filteredPoints = allPoints;
+		if (currentPOI !== 'all') {
+			filteredPoints = filteredPoints.filter(
+				(point) => point.properties[currentPOI] === true
+			);
+		}
 
-			//filter by wind direction
-			if (currentWindDirection !== 'all') {
-				filteredPoints = filteredPoints.filter(
-					(point) => point.properties.winddirection === currentWindDirection
-				);
-			}
+		if (currentDayNight !== 'all') {
+			filteredPoints = filteredPoints.filter(
+				(point) => point.properties.sunrise_sunset === currentDayNight
+			);
+		}
 
-			//filter by severity if filtering enabled
-			if (filterBySeverity) {
-				filteredPoints = filteredPoints.filter((point) => {
-					return point.properties.severity === currentSeverity;
-				});
-			}
+		//single ended slider filters
+		if (filterBySeverity) {
+			filteredPoints = filteredPoints.filter((point) => {
+				return point.properties.severity === currentSeverity;
+			});
+		}
 
-			//filter by starttime if filtering enabled
-			if (filterByTime) {
-				filteredPoints = filteredPoints.filter((point) => {
-					const timeString = point.properties.starttime;
-					const hour = parseInt(timeString.split(' ')[1].split(':')[0]);
-					return hour === currentTime;
-				});
-			}
+		if (filterByTime) {
+			filteredPoints = filteredPoints.filter((point) => {
+				const timeString = point.properties.starttime;
+				const hour = parseInt(timeString.split(' ')[1].split(':')[0]);
+				return hour === currentTime;
+			});
+		}
 
-		//filter by temperature if filtering enabled
+		if (filterByDate) {
+			filteredPoints = filteredPoints.filter((point) => {
+				const date = point.properties.starttime.split(' ')[0];
+				if (currentStartDate && date < currentStartDate) return false;
+				if (currentEndDate && date > currentEndDate) return false;
+				return true;
+			});
+		}
+
+		//double ended slider filters
 		if (filterByTemp) {
 			filteredPoints = filteredPoints.filter((point) => {
 				const temp = parseFloat(point.properties.temperature);
@@ -455,31 +482,40 @@
 			});
 		}
 
-	if (filterByWindChill) {
-		filteredPoints = filteredPoints.filter((point) => {
-			const windChill = parseFloat(point.properties.windchill);
-			return windChill >= currentMinWindChill && windChill <= currentMaxWindChill;
-		});
-	}
-
-	// Use requestAnimationFrame for smooth rendering
-		requestAnimationFrame(() => {
-			renderPoints(filteredPoints);
-		});
-	}
-
-		// connect the dropdown menu to the visualization
-		function setupFilter() {
-			d3.select('#windDirectionFilter').on('change', function () {
-				currentWindDirection = this.value;
-				updateAndFilterPoints();
+		if (filterByWindChill) {
+			filteredPoints = filteredPoints.filter((point) => {
+				const windChill = parseFloat(point.properties.windchill);
+				return windChill >= currentMinWindChill && windChill <= currentMaxWindChill;
 			});
 		}
 
-	function setupSliders() {
+		//update crash count display
+		d3.select('#crashCount').text(filteredPoints.length.toLocaleString());
+
+		renderPoints(filteredPoints);
+	}
+
+	function setupFilters() {
+		//dropdowns
+		d3.select('#windDirectionFilter').on('change', function () {
+			currentWindDirection = this.value;
+			updateAndFilterPoints();
+		});
+
+		d3.select('#poiFilter').on('change', function () {
+			currentPOI = this.value;
+			updateAndFilterPoints();
+		});
+
+		d3.select('#dayNightFilter').on('change', function () {
+			currentDayNight = this.value;
+			updateAndFilterPoints();
+		});
+
+		//single ended sliders
 		d3.select('#severitySlider').on('input', function () {
 			const sliderValue = parseInt(this.value);
-			
+
 			if (sliderValue === 0) {
 				currentSeverity = 'all';
 				filterBySeverity = false;
@@ -493,7 +529,7 @@
 				filterBySeverity = true;
 				d3.select('#severityDisplay').text('4');
 			}
-			
+
 			updateAndFilterPoints();
 		});
 
@@ -519,6 +555,26 @@
 			updateAndFilterPoints();
 		});
 
+		//date inputs
+		d3.select('#startDateInput').on('change', function () {
+			currentStartDate = this.value;
+			if (currentStartDate || currentEndDate) {
+				filterByDate = true;
+			}
+			d3.select('#startDateDisplay').text(currentStartDate || 'All');
+			updateAndFilterPoints();
+		});
+
+		d3.select('#endDateInput').on('change', function () {
+			currentEndDate = this.value;
+			if (currentStartDate || currentEndDate) {
+				filterByDate = true;
+			}
+			d3.select('#endDateDisplay').text(currentEndDate || 'All');
+			updateAndFilterPoints();
+		});
+
+		//double ended sliders
 		const minTempSlider = d3.select('#minTempSlider');
 		const maxTempSlider = d3.select('#maxTempSlider');
 		const minTempDisplay = d3.select('#minTempDisplay');
@@ -527,7 +583,7 @@
 		minTempSlider.on('input', function () {
 			const minVal = parseInt(this.value);
 			const maxVal = parseInt(maxTempSlider.node().value);
-			
+
 			if (minVal <= maxVal) {
 				currentMinTemp = minVal;
 				minTempDisplay.text(minVal + '°F');
@@ -538,245 +594,256 @@
 			}
 		});
 
-	maxTempSlider.on('input', function () {
-		const maxVal = parseInt(this.value);
-		const minVal = parseInt(minTempSlider.node().value);
-		
-		if (maxVal >= minVal) {
-			currentMaxTemp = maxVal;
-			maxTempDisplay.text(maxVal + '°F');
-			filterByTemp = true;
-			updateAndFilterPoints();
-		} else {
-			this.value = currentMaxTemp;
-		}
-	});
+		maxTempSlider.on('input', function () {
+			const maxVal = parseInt(this.value);
+			const minVal = parseInt(minTempSlider.node().value);
 
-	const minHumiditySlider = d3.select('#minHumiditySlider');
-	const maxHumiditySlider = d3.select('#maxHumiditySlider');
-	const minHumidityDisplay = d3.select('#minHumidityDisplay');
-	const maxHumidityDisplay = d3.select('#maxHumidityDisplay');
+			if (maxVal >= minVal) {
+				currentMaxTemp = maxVal;
+				maxTempDisplay.text(maxVal + '°F');
+				filterByTemp = true;
+				updateAndFilterPoints();
+			} else {
+				this.value = currentMaxTemp;
+			}
+		});
 
-	minHumiditySlider.on('input', function () {
-		const minVal = parseInt(this.value);
-		const maxVal = parseInt(maxHumiditySlider.node().value);
-		
-		if (minVal <= maxVal) {
-			currentMinHumidity = minVal;
-			minHumidityDisplay.text(minVal + '%');
-			filterByHumidity = true;
-			updateAndFilterPoints();
-		} else {
-			this.value = currentMinHumidity;
-		}
-	});
+		const minHumiditySlider = d3.select('#minHumiditySlider');
+		const maxHumiditySlider = d3.select('#maxHumiditySlider');
+		const minHumidityDisplay = d3.select('#minHumidityDisplay');
+		const maxHumidityDisplay = d3.select('#maxHumidityDisplay');
 
-	maxHumiditySlider.on('input', function () {
-		const maxVal = parseInt(this.value);
-		const minVal = parseInt(minHumiditySlider.node().value);
-		
-		if (maxVal >= minVal) {
-			currentMaxHumidity = maxVal;
-			maxHumidityDisplay.text(maxVal + '%');
-			filterByHumidity = true;
-			updateAndFilterPoints();
-		} else {
-			this.value = currentMaxHumidity;
-		}
-	});
+		minHumiditySlider.on('input', function () {
+			const minVal = parseInt(this.value);
+			const maxVal = parseInt(maxHumiditySlider.node().value);
 
-	const minPrecipSlider = d3.select('#minPrecipSlider');
-	const maxPrecipSlider = d3.select('#maxPrecipSlider');
-	const minPrecipDisplay = d3.select('#minPrecipDisplay');
-	const maxPrecipDisplay = d3.select('#maxPrecipDisplay');
+			if (minVal <= maxVal) {
+				currentMinHumidity = minVal;
+				minHumidityDisplay.text(minVal + '%');
+				filterByHumidity = true;
+				updateAndFilterPoints();
+			} else {
+				this.value = currentMinHumidity;
+			}
+		});
 
-	minPrecipSlider.on('input', function () {
-		const minVal = parseFloat(this.value);
-		const maxVal = parseFloat(maxPrecipSlider.node().value);
-		
-		if (minVal <= maxVal) {
-			currentMinPrecip = minVal;
-			minPrecipDisplay.text(minVal.toFixed(2) + '"');
-			filterByPrecip = true;
-			updateAndFilterPoints();
-		} else {
-			this.value = currentMinPrecip;
-		}
-	});
+		maxHumiditySlider.on('input', function () {
+			const maxVal = parseInt(this.value);
+			const minVal = parseInt(minHumiditySlider.node().value);
 
-	maxPrecipSlider.on('input', function () {
-		const maxVal = parseFloat(this.value);
-		const minVal = parseFloat(minPrecipSlider.node().value);
-		
-		if (maxVal >= minVal) {
-			currentMaxPrecip = maxVal;
-			maxPrecipDisplay.text(maxVal.toFixed(2) + '"');
-			filterByPrecip = true;
-			updateAndFilterPoints();
-		} else {
-			this.value = currentMaxPrecip;
-		}
-	});
+			if (maxVal >= minVal) {
+				currentMaxHumidity = maxVal;
+				maxHumidityDisplay.text(maxVal + '%');
+				filterByHumidity = true;
+				updateAndFilterPoints();
+			} else {
+				this.value = currentMaxHumidity;
+			}
+		});
 
-	const minPressureSlider = d3.select('#minPressureSlider');
-	const maxPressureSlider = d3.select('#maxPressureSlider');
-	const minPressureDisplay = d3.select('#minPressureDisplay');
-	const maxPressureDisplay = d3.select('#maxPressureDisplay');
+		const minPrecipSlider = d3.select('#minPrecipSlider');
+		const maxPrecipSlider = d3.select('#maxPrecipSlider');
+		const minPrecipDisplay = d3.select('#minPrecipDisplay');
+		const maxPrecipDisplay = d3.select('#maxPrecipDisplay');
 
-	minPressureSlider.on('input', function () {
-		const minVal = parseFloat(this.value);
-		const maxVal = parseFloat(maxPressureSlider.node().value);
-		
-		if (minVal <= maxVal) {
-			currentMinPressure = minVal;
-			minPressureDisplay.text(minVal.toFixed(2) + '"');
-			filterByPressure = true;
-			updateAndFilterPoints();
-		} else {
-			this.value = currentMinPressure;
-		}
-	});
+		minPrecipSlider.on('input', function () {
+			const minVal = parseFloat(this.value);
+			const maxVal = parseFloat(maxPrecipSlider.node().value);
 
-	maxPressureSlider.on('input', function () {
-		const maxVal = parseFloat(this.value);
-		const minVal = parseFloat(minPressureSlider.node().value);
-		
-		if (maxVal >= minVal) {
-			currentMaxPressure = maxVal;
-			maxPressureDisplay.text(maxVal.toFixed(2) + '"');
-			filterByPressure = true;
-			updateAndFilterPoints();
-		} else {
-			this.value = currentMaxPressure;
-		}
-	});
+			if (minVal <= maxVal) {
+				currentMinPrecip = minVal;
+				minPrecipDisplay.text(minVal.toFixed(2) + '"');
+				filterByPrecip = true;
+				updateAndFilterPoints();
+			} else {
+				this.value = currentMinPrecip;
+			}
+		});
 
-	const minVisibilitySlider = d3.select('#minVisibilitySlider');
-	const maxVisibilitySlider = d3.select('#maxVisibilitySlider');
-	const minVisibilityDisplay = d3.select('#minVisibilityDisplay');
-	const maxVisibilityDisplay = d3.select('#maxVisibilityDisplay');
+		maxPrecipSlider.on('input', function () {
+			const maxVal = parseFloat(this.value);
+			const minVal = parseFloat(minPrecipSlider.node().value);
 
-	minVisibilitySlider.on('input', function () {
-		const minVal = parseFloat(this.value);
-		const maxVal = parseFloat(maxVisibilitySlider.node().value);
-		
-		if (minVal <= maxVal) {
-			currentMinVisibility = minVal;
-			minVisibilityDisplay.text(minVal.toFixed(1) + ' mi');
-			filterByVisibility = true;
-			updateAndFilterPoints();
-		} else {
-			this.value = currentMinVisibility;
-		}
-	});
+			if (maxVal >= minVal) {
+				currentMaxPrecip = maxVal;
+				maxPrecipDisplay.text(maxVal.toFixed(2) + '"');
+				filterByPrecip = true;
+				updateAndFilterPoints();
+			} else {
+				this.value = currentMaxPrecip;
+			}
+		});
 
-	maxVisibilitySlider.on('input', function () {
-		const maxVal = parseFloat(this.value);
-		const minVal = parseFloat(minVisibilitySlider.node().value);
-		
-		if (maxVal >= minVal) {
-			currentMaxVisibility = maxVal;
-			maxVisibilityDisplay.text(maxVal.toFixed(1) + ' mi');
-			filterByVisibility = true;
-			updateAndFilterPoints();
-		} else {
-			this.value = currentMaxVisibility;
-		}
-	});
+		const minPressureSlider = d3.select('#minPressureSlider');
+		const maxPressureSlider = d3.select('#maxPressureSlider');
+		const minPressureDisplay = d3.select('#minPressureDisplay');
+		const maxPressureDisplay = d3.select('#maxPressureDisplay');
 
-	const minWindChillSlider = d3.select('#minWindChillSlider');
-	const maxWindChillSlider = d3.select('#maxWindChillSlider');
-	const minWindChillDisplay = d3.select('#minWindChillDisplay');
-	const maxWindChillDisplay = d3.select('#maxWindChillDisplay');
+		minPressureSlider.on('input', function () {
+			const minVal = parseFloat(this.value);
+			const maxVal = parseFloat(maxPressureSlider.node().value);
 
-	minWindChillSlider.on('input', function () {
-		const minVal = parseInt(this.value);
-		const maxVal = parseInt(maxWindChillSlider.node().value);
-		
-		if (minVal <= maxVal) {
-			currentMinWindChill = minVal;
-			minWindChillDisplay.text(minVal + '°F');
-			filterByWindChill = true;
-			updateAndFilterPoints();
-		} else {
-			this.value = currentMinWindChill;
-		}
-	});
+			if (minVal <= maxVal) {
+				currentMinPressure = minVal;
+				minPressureDisplay.text(minVal.toFixed(2) + '"');
+				filterByPressure = true;
+				updateAndFilterPoints();
+			} else {
+				this.value = currentMinPressure;
+			}
+		});
 
-	maxWindChillSlider.on('input', function () {
-		const maxVal = parseInt(this.value);
-		const minVal = parseInt(minWindChillSlider.node().value);
-		
-		if (maxVal >= minVal) {
-			currentMaxWindChill = maxVal;
-			maxWindChillDisplay.text(maxVal + '°F');
-			filterByWindChill = true;
-			updateAndFilterPoints();
-		} else {
-			this.value = currentMaxWindChill;
-		}
-	});
+		maxPressureSlider.on('input', function () {
+			const maxVal = parseFloat(this.value);
+			const minVal = parseFloat(minPressureSlider.node().value);
 
-}
+			if (maxVal >= minVal) {
+				currentMaxPressure = maxVal;
+				maxPressureDisplay.text(maxVal.toFixed(2) + '"');
+				filterByPressure = true;
+				updateAndFilterPoints();
+			} else {
+				this.value = currentMaxPressure;
+			}
+		});
+
+		const minVisibilitySlider = d3.select('#minVisibilitySlider');
+		const maxVisibilitySlider = d3.select('#maxVisibilitySlider');
+		const minVisibilityDisplay = d3.select('#minVisibilityDisplay');
+		const maxVisibilityDisplay = d3.select('#maxVisibilityDisplay');
+
+		minVisibilitySlider.on('input', function () {
+			const minVal = parseFloat(this.value);
+			const maxVal = parseFloat(maxVisibilitySlider.node().value);
+
+			if (minVal <= maxVal) {
+				currentMinVisibility = minVal;
+				minVisibilityDisplay.text(minVal.toFixed(1) + ' mi');
+				filterByVisibility = true;
+				updateAndFilterPoints();
+			} else {
+				this.value = currentMinVisibility;
+			}
+		});
+
+		maxVisibilitySlider.on('input', function () {
+			const maxVal = parseFloat(this.value);
+			const minVal = parseFloat(minVisibilitySlider.node().value);
+
+			if (maxVal >= minVal) {
+				currentMaxVisibility = maxVal;
+				maxVisibilityDisplay.text(maxVal.toFixed(1) + ' mi');
+				filterByVisibility = true;
+				updateAndFilterPoints();
+			} else {
+				this.value = currentMaxVisibility;
+			}
+		});
+
+		const minWindChillSlider = d3.select('#minWindChillSlider');
+		const maxWindChillSlider = d3.select('#maxWindChillSlider');
+		const minWindChillDisplay = d3.select('#minWindChillDisplay');
+		const maxWindChillDisplay = d3.select('#maxWindChillDisplay');
+
+		minWindChillSlider.on('input', function () {
+			const minVal = parseInt(this.value);
+			const maxVal = parseInt(maxWindChillSlider.node().value);
+
+			if (minVal <= maxVal) {
+				currentMinWindChill = minVal;
+				minWindChillDisplay.text(minVal + '°F');
+				filterByWindChill = true;
+				updateAndFilterPoints();
+			} else {
+				this.value = currentMinWindChill;
+			}
+		});
+
+		maxWindChillSlider.on('input', function () {
+			const maxVal = parseInt(this.value);
+			const minVal = parseInt(minWindChillSlider.node().value);
+
+			if (maxVal >= minVal) {
+				currentMaxWindChill = maxVal;
+				maxWindChillDisplay.text(maxVal + '°F');
+				filterByWindChill = true;
+				updateAndFilterPoints();
+			} else {
+				this.value = currentMaxWindChill;
+			}
+		});
+
+	}
 
 	function setupButtons() {
-	d3.select('#resetAllBtn').on('click', function () {
-		currentWindDirection = 'all';
-		currentSeverity = 'all';
-		currentTime = 0;
-		currentMinTemp = 25;
-		currentMaxTemp = 90;
-		currentMinHumidity = 18;
-		currentMaxHumidity = 100;
-		currentMinPrecip = 0;
-		currentMaxPrecip = 1.34;
-		currentMinPressure = 20.11;
-		currentMaxPressure = 30.41;
-		currentMinVisibility = 0;
-	currentMaxVisibility = 10;
-	currentMinWindChill = 23;
-	currentMaxWindChill = 89;
-	filterByTime = false;
-	filterBySeverity = false;
-	filterByTemp = false;
-	filterByHumidity = false;
-	filterByPrecip = false;
-	filterByPressure = false;
-	filterByVisibility = false;
-	filterByWindChill = false;
+		d3.select('#resetAllBtn').on('click', function () {
+			currentWindDirection = 'all';
+			currentPOI = 'all';
+			currentDayNight = 'all';
+			currentSeverity = 'all';
+			currentTime = 0;
+			currentMinTemp = 25;
+			currentMaxTemp = 90;
+			currentMinHumidity = 18;
+			currentMaxHumidity = 100;
+			currentMinPrecip = 0;
+			currentMaxPrecip = 1.34;
+			currentMinPressure = 20.11;
+			currentMaxPressure = 30.41;
+			currentMinVisibility = 0;
+			currentMaxVisibility = 10;
+			currentMinWindChill = 23;
+			currentMaxWindChill = 89;
+			filterByTime = false;
+			filterByDate = false;
+			filterBySeverity = false;
+			filterByTemp = false;
+			filterByHumidity = false;
+			filterByPrecip = false;
+			filterByPressure = false;
+			filterByVisibility = false;
+			filterByWindChill = false;
+			currentStartDate = null;
+			currentEndDate = null;
 
-		d3.select('#windDirectionFilter').property('value', 'all');
-		d3.select('#severitySlider').node().value = 0;
-		d3.select('#severityDisplay').text('All');
-		d3.select('#startTimeSlider').node().value = 0;
-		d3.select('#timeDisplay').text('12:00 AM');
-		d3.select('#minTempSlider').node().value = 25;
-		d3.select('#maxTempSlider').node().value = 90;
-		d3.select('#minTempDisplay').text('25°F');
-		d3.select('#maxTempDisplay').text('90°F');
-		d3.select('#minHumiditySlider').node().value = 18;
-		d3.select('#maxHumiditySlider').node().value = 100;
-		d3.select('#minHumidityDisplay').text('18%');
-		d3.select('#maxHumidityDisplay').text('100%');
-		d3.select('#minPrecipSlider').node().value = 0;
-		d3.select('#maxPrecipSlider').node().value = 1.34;
-		d3.select('#minPrecipDisplay').text('0.0"');
-		d3.select('#maxPrecipDisplay').text('1.34"');
-		d3.select('#minPressureSlider').node().value = 20.11;
-		d3.select('#maxPressureSlider').node().value = 30.41;
-		d3.select('#minPressureDisplay').text('20.11"');
-		d3.select('#maxPressureDisplay').text('30.41"');
-		d3.select('#minVisibilitySlider').node().value = 0;
-		d3.select('#maxVisibilitySlider').node().value = 10;
-		d3.select('#minVisibilityDisplay').text('0 mi');
-		d3.select('#maxVisibilityDisplay').text('10 mi');
-		d3.select('#minWindChillSlider').node().value = 23;
-		d3.select('#maxWindChillSlider').node().value = 89;
-	d3.select('#minWindChillDisplay').text('23°F');
-	d3.select('#maxWindChillDisplay').text('89°F');
+			d3.select('#windDirectionFilter').property('value', 'all');
+			d3.select('#poiFilter').property('value', 'all');
+			d3.select('#dayNightFilter').property('value', 'all');
+			d3.select('#severitySlider').node().value = 0;
+			d3.select('#severityDisplay').text('All');
+			d3.select('#startTimeSlider').node().value = 0;
+			d3.select('#timeDisplay').text('12:00 AM');
+			d3.select('#startDateInput').node().value = '';
+			d3.select('#endDateInput').node().value = '';
+			d3.select('#startDateDisplay').text('All');
+			d3.select('#endDateDisplay').text('All');
+			d3.select('#minTempSlider').node().value = 25;
+			d3.select('#maxTempSlider').node().value = 90;
+			d3.select('#minTempDisplay').text('25°F');
+			d3.select('#maxTempDisplay').text('90°F');
+			d3.select('#minHumiditySlider').node().value = 18;
+			d3.select('#maxHumiditySlider').node().value = 100;
+			d3.select('#minHumidityDisplay').text('18%');
+			d3.select('#maxHumidityDisplay').text('100%');
+			d3.select('#minPrecipSlider').node().value = 0;
+			d3.select('#maxPrecipSlider').node().value = 1.34;
+			d3.select('#minPrecipDisplay').text('0.0"');
+			d3.select('#maxPrecipDisplay').text('1.34"');
+			d3.select('#minPressureSlider').node().value = 20.11;
+			d3.select('#maxPressureSlider').node().value = 30.41;
+			d3.select('#minPressureDisplay').text('20.11"');
+			d3.select('#maxPressureDisplay').text('30.41"');
+			d3.select('#minVisibilitySlider').node().value = 0;
+			d3.select('#maxVisibilitySlider').node().value = 10;
+			d3.select('#minVisibilityDisplay').text('0 mi');
+			d3.select('#maxVisibilityDisplay').text('10 mi');
+			d3.select('#minWindChillSlider').node().value = 23;
+			d3.select('#maxWindChillSlider').node().value = 89;
+			d3.select('#minWindChillDisplay').text('23°F');
+			d3.select('#maxWindChillDisplay').text('89°F');
 
-	updateAndFilterPoints();
-	});
+			updateAndFilterPoints();
+		});
 
 		d3.select('#showAllSeveritiesBtn').on('click', function () {
 			filterBySeverity = false;
@@ -798,89 +865,109 @@
 			updateAndFilterPoints();
 		});
 
-	d3.select('#showAllTempsBtn').on('click', function () {
-		filterByTemp = false;
-		currentMinTemp = 25;
-		currentMaxTemp = 90;
+		d3.select('#resetStartDateBtn').on('click', function () {
+			currentStartDate = null;
+			d3.select('#startDateInput').node().value = '';
+			d3.select('#startDateDisplay').text('All');
+			if (!currentStartDate && !currentEndDate) {
+				filterByDate = false;
+			}
+			updateAndFilterPoints();
+		});
 
-		d3.select('#minTempSlider').node().value = 25;
-		d3.select('#maxTempSlider').node().value = 90;
-		d3.select('#minTempDisplay').text('25°F');
-		d3.select('#maxTempDisplay').text('90°F');
+		d3.select('#resetEndDateBtn').on('click', function () {
+			currentEndDate = null;
+			d3.select('#endDateInput').node().value = '';
+			d3.select('#endDateDisplay').text('All');
+			if (!currentStartDate && !currentEndDate) {
+				filterByDate = false;
+			}
+			updateAndFilterPoints();
+		});
 
-		updateAndFilterPoints();
-	});
+		d3.select('#showAllTempsBtn').on('click', function () {
+			filterByTemp = false;
+			currentMinTemp = 25;
+			currentMaxTemp = 90;
 
-	d3.select('#showAllHumidityBtn').on('click', function () {
-		filterByHumidity = false;
-		currentMinHumidity = 18;
-		currentMaxHumidity = 100;
+			d3.select('#minTempSlider').node().value = 25;
+			d3.select('#maxTempSlider').node().value = 90;
+			d3.select('#minTempDisplay').text('25°F');
+			d3.select('#maxTempDisplay').text('90°F');
 
-		d3.select('#minHumiditySlider').node().value = 18;
-		d3.select('#maxHumiditySlider').node().value = 100;
-		d3.select('#minHumidityDisplay').text('18%');
-		d3.select('#maxHumidityDisplay').text('100%');
+			updateAndFilterPoints();
+		});
 
-		updateAndFilterPoints();
-	});
+		d3.select('#showAllHumidityBtn').on('click', function () {
+			filterByHumidity = false;
+			currentMinHumidity = 18;
+			currentMaxHumidity = 100;
 
-	d3.select('#showAllPrecipBtn').on('click', function () {
-		filterByPrecip = false;
-		currentMinPrecip = 0;
-		currentMaxPrecip = 1.34;
+			d3.select('#minHumiditySlider').node().value = 18;
+			d3.select('#maxHumiditySlider').node().value = 100;
+			d3.select('#minHumidityDisplay').text('18%');
+			d3.select('#maxHumidityDisplay').text('100%');
 
-		d3.select('#minPrecipSlider').node().value = 0;
-		d3.select('#maxPrecipSlider').node().value = 1.34;
-		d3.select('#minPrecipDisplay').text('0.0"');
-		d3.select('#maxPrecipDisplay').text('1.34"');
+			updateAndFilterPoints();
+		});
 
-		updateAndFilterPoints();
-	});
+		d3.select('#showAllPrecipBtn').on('click', function () {
+			filterByPrecip = false;
+			currentMinPrecip = 0;
+			currentMaxPrecip = 1.34;
 
-	d3.select('#showAllPressureBtn').on('click', function () {
-		filterByPressure = false;
-		currentMinPressure = 20.11;
-		currentMaxPressure = 30.41;
+			d3.select('#minPrecipSlider').node().value = 0;
+			d3.select('#maxPrecipSlider').node().value = 1.34;
+			d3.select('#minPrecipDisplay').text('0.0"');
+			d3.select('#maxPrecipDisplay').text('1.34"');
 
-		d3.select('#minPressureSlider').node().value = 20.11;
-		d3.select('#maxPressureSlider').node().value = 30.41;
-		d3.select('#minPressureDisplay').text('20.11"');
-		d3.select('#maxPressureDisplay').text('30.41"');
+			updateAndFilterPoints();
+		});
 
-		updateAndFilterPoints();
-	});
+		d3.select('#showAllPressureBtn').on('click', function () {
+			filterByPressure = false;
+			currentMinPressure = 20.11;
+			currentMaxPressure = 30.41;
 
-	d3.select('#showAllVisibilityBtn').on('click', function () {
-		filterByVisibility = false;
-		currentMinVisibility = 0;
-		currentMaxVisibility = 10;
+			d3.select('#minPressureSlider').node().value = 20.11;
+			d3.select('#maxPressureSlider').node().value = 30.41;
+			d3.select('#minPressureDisplay').text('20.11"');
+			d3.select('#maxPressureDisplay').text('30.41"');
 
-		d3.select('#minVisibilitySlider').node().value = 0;
-		d3.select('#maxVisibilitySlider').node().value = 10;
-		d3.select('#minVisibilityDisplay').text('0 mi');
-		d3.select('#maxVisibilityDisplay').text('10 mi');
+			updateAndFilterPoints();
+		});
 
-		updateAndFilterPoints();
-	});
+		d3.select('#showAllVisibilityBtn').on('click', function () {
+			filterByVisibility = false;
+			currentMinVisibility = 0;
+			currentMaxVisibility = 10;
 
-	d3.select('#showAllWindChillBtn').on('click', function () {
-		filterByWindChill = false;
-		currentMinWindChill = 23;
-		currentMaxWindChill = 89;
+			d3.select('#minVisibilitySlider').node().value = 0;
+			d3.select('#maxVisibilitySlider').node().value = 10;
+			d3.select('#minVisibilityDisplay').text('0 mi');
+			d3.select('#maxVisibilityDisplay').text('10 mi');
 
-		d3.select('#minWindChillSlider').node().value = 23;
-		d3.select('#maxWindChillSlider').node().value = 89;
-		d3.select('#minWindChillDisplay').text('23°F');
-		d3.select('#maxWindChillDisplay').text('89°F');
+			updateAndFilterPoints();
+		});
 
-		updateAndFilterPoints();
-	});
+		d3.select('#showAllWindChillBtn').on('click', function () {
+			filterByWindChill = false;
+			currentMinWindChill = 23;
+			currentMaxWindChill = 89;
+
+			d3.select('#minWindChillSlider').node().value = 23;
+			d3.select('#maxWindChillSlider').node().value = 89;
+			d3.select('#minWindChillDisplay').text('23°F');
+			d3.select('#maxWindChillDisplay').text('89°F');
+
+			updateAndFilterPoints();
+		});
 	}
 
-		//  ------------------------ SETUP EXECUTION --------------------------
-		setupFilter();
-		setupSliders();
-		setupButtons();
-		svg.call(zoom);
-	</script>
+	//  ------------------------ SETUP EXECUTION --------------------------
+	setupFilters();
+	setupButtons();
+	svg.call(zoom);
+</script>
+
 </html>
