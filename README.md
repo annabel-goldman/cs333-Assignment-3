@@ -1,5 +1,8 @@
 # Interactive Visualization for Florida Traffic Accidents During Jan-March 2023
 
+## To View This Project Online
+1. Enter this url in your search engine: https://annabel-goldman.github.io/cs333-Assignment-3/
+
 ## How to Run this Project Locally
 1. Clone this repository
 2. Run `python -m http.server` in the root of this project.
