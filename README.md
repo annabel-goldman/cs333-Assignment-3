@@ -24,6 +24,12 @@
 9. Go to `localhost:8000`
 
 
+## To View Cleaned Data Without Cleaning Locally
+1. Download our zip file avalible on canvas 
+2. Unzip the folder
+3. Open up clean-data.csv
+
+
 ## References Used
 
 #### Raw Dataset
