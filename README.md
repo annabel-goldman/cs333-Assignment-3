@@ -66,9 +66,10 @@ https://stackoverflow.com/questions/4753946/html-slider-with-two-inputs-possible
 https://codepen.io/vsync/pen/mdEJMLv
 
 
-#### Chat Convo about GeoJSON
+#### GenAI Conversations about GeoJSON
 https://chatgpt.com/share/690f9723-07d8-800e-9946-1c58deb63a65
 https://chatgpt.com/c/690f9693-73cc-8330-bbcc-b3a4c13f5af3
+See our prompt history [here](./prompt-history.md) for other GenAI prompts we used when implementing this visualization and debugging.
 
 
 #### Calendar input
