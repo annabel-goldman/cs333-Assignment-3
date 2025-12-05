@@ -4,30 +4,30 @@
 1. Enter this url in your search engine: https://annabel-goldman.github.io/cs333-Assignment-3/
 
 ## How to Run This Project Locally
-1. Clone this repository
-2. Run `python -m http.server` in the root of this project.
-3. Go to `localhost:8000`
-
-
-## How to Run Data Cleaning Locally
 1. Clone this repository.
-2. Install Anaconda or MiniConda: 
-    https://www.anaconda.com/download 
-    https://www.anaconda.com/docs/getting-started/miniconda/install
-3. Open a terminal at the root of the cloned repository and run `conda env create -f environment.yml`.
-4. Once the conda environment has been created, run `conda activate datacleaning`.
-5. Obtain a csv file of our data set available at  
-    https://www.kaggle.com/datasets/sobhanmoosavi/us-accidents/data.
-6. Put the CSV file into the root of our repository and rename it "data.csv".
-7. Run all of the code in [data-cleaning.ipynb](./data-cleaning.ipynb). You should now have a new CSV file called "clean-data.csv" that will serve as the data source for our data visualization.
-8. Run `python -m http.server` in the root of this project.
-9. Go to `localhost:8000`.
+2. Run `python -m http.server` in the root of this project.
+3. Go to `localhost:8000` in your browser.
 
 ## How to Run This Visualization Locally Without Data Cleaning
 1. Download our available zip file [at this Google Drive link](https://drive.google.com/file/d/1nUiD8M67kHh6otPpXbEoUuG1XEPC8tjy/view?usp=sharing).
-2. Unzip the folder and move the CSV file into your local directory for this repository. Keep it at the root of this repository.
+2. Unzip the folder and move the CSV file into your local directory for this repository. Keep it at the root of this repository. It should be named "clean-data.csv".
 3. Run `python -m http.server` in the root of this project.
 4. Go to `localhost:8000`.
+
+## How to Run This Visualization Locally WITH Data Cleaning (VSCode Recommended)
+1. Clone this repository.
+2. Install Anaconda or MiniConda: 
+    https://www.anaconda.com/download 
+    https://www.anaconda.com/docs/getting-started/miniconda/install.
+3. Install Microsoft's Jupyter extension. 
+4. Open a terminal at the root of the cloned repository and run `conda env create -f environment.yml`.
+5. Once the conda environment has been created, run `conda activate datacleaning`.
+6. Obtain a csv file of our data set available at  
+    https://www.kaggle.com/datasets/sobhanmoosavi/us-accidents/data.
+7. Put the CSV file into the root of our repository and rename it "data.csv".
+8. Run all of the code in [data-cleaning.ipynb](./data-cleaning.ipynb). You should now have a new CSV file called "clean-data.csv" that will serve as the data source for our data visualization.
+9. Run `python -m http.server` in the root of this project.
+10. Go to `localhost:8000`.
 
 ## References Used
 
