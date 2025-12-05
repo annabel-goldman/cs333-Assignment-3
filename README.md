@@ -3,32 +3,31 @@
 ## To View This Project Online
 1. Enter this url in your search engine: https://annabel-goldman.github.io/cs333-Assignment-3/
 
-## How to Run this Project Locally
+## How to Run This Project Locally
 1. Clone this repository
 2. Run `python -m http.server` in the root of this project.
 3. Go to `localhost:8000`
 
 
-## How to run Data Cleaning Locally
-1. Clone this repository
+## How to Run Data Cleaning Locally
+1. Clone this repository.
 2. Install Anaconda or MiniConda: 
     https://www.anaconda.com/download 
     https://www.anaconda.com/docs/getting-started/miniconda/install
 3. Open a terminal at the root of the cloned repository and run `conda env create -f environment.yml`.
 4. Once the conda environment has been created, run `conda activate datacleaning`.
-5. Obtain a csv file of our data set avalible at  
-    https://www.kaggle.com/datasets/sobhanmoosavi/us-accidents/data
-6. Put the CSV file into the root of our repository and rename it "data.csv"
-7. Run the jyptr notebook code 
+5. Obtain a csv file of our data set available at  
+    https://www.kaggle.com/datasets/sobhanmoosavi/us-accidents/data.
+6. Put the CSV file into the root of our repository and rename it "data.csv".
+7. Run all of the code in [data-cleaning.ipynb](./data-cleaning.ipynb). You should now have a new CSV file called "clean-data.csv" that will serve as the data source for our data visualization.
 8. Run `python -m http.server` in the root of this project.
-9. Go to `localhost:8000`
+9. Go to `localhost:8000`.
 
-
-## To View Cleaned Data Without Cleaning Locally
-1. Download our zip file avalible on canvas 
-2. Unzip the folder
-3. Open up clean-data.csv
-
+## How to Run This Visualization Locally Without Data Cleaning
+1. Download our available zip file [at this Google Drive link](https://drive.google.com/file/d/1nUiD8M67kHh6otPpXbEoUuG1XEPC8tjy/view?usp=sharing).
+2. Unzip the folder and move the CSV file into your local directory for this repository. Keep it at the root of this repository.
+3. Run `python -m http.server` in the root of this project.
+4. Go to `localhost:8000`.
 
 ## References Used
 
