@@ -4,7 +4,7 @@
 1. Enter this url in your search engine: https://annabel-goldman.github.io/cs333-Assignment-3/
 
 ## How to Run This Visualization Locally Without Data Cleaning
-1. Download the bundled version of our repository [at this Google Drive link](https://drive.google.com/file/d/1nUiD8M67kHh6otPpXbEoUuG1XEPC8tjy/view?usp=sharing). This will include all of the code within this repository, so you don't need to clone this repository.
+1. Download the bundled version of our repository [at this Google Drive link](https://drive.google.com/file/d/1KQLnzvrcquBVWm8QBv6pk-VrSkjd7q1R/view?usp=sharing). This will include all of the code within this repository, so you don't need to clone this repository.
 2. Unzip the folder and open it in the IDE of your choice. It should include a "clean-data.csv" file that you won't see committed to this repository because of storage restrictions.
 3. Run `python -m http.server` in the root of the folder.
 4. Go to `localhost:8000`.
