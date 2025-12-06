@@ -3,15 +3,10 @@
 ## To View This Project Online
 1. Enter this url in your search engine: https://annabel-goldman.github.io/cs333-Assignment-3/
 
-## How to Run This Project Locally
-1. Clone this repository.
-2. Run `python -m http.server` in the root of this project.
-3. Go to `localhost:8000` in your browser.
-
 ## How to Run This Visualization Locally Without Data Cleaning
-1. Download our available zip file [at this Google Drive link](https://drive.google.com/file/d/1nUiD8M67kHh6otPpXbEoUuG1XEPC8tjy/view?usp=sharing).
-2. Unzip the folder and move the CSV file into your local directory for this repository. Keep it at the root of this repository. It should be named "clean-data.csv".
-3. Run `python -m http.server` in the root of this project.
+1. Download the bundled version of our repository [at this Google Drive link](https://drive.google.com/file/d/1nUiD8M67kHh6otPpXbEoUuG1XEPC8tjy/view?usp=sharing). This will include all of the code within this repository, so you don't need to clone this repository.
+2. Unzip the folder and open it in the IDE of your choice. It should include a "clean-data.csv" file that you won't see committed to this repository because of storage restrictions.
+3. Run `python -m http.server` in the root of the folder.
 4. Go to `localhost:8000`.
 
 ## How to Run This Visualization Locally WITH Data Cleaning (VSCode Recommended)
@@ -19,15 +14,15 @@
 2. Install Anaconda or MiniConda: 
     https://www.anaconda.com/download 
     https://www.anaconda.com/docs/getting-started/miniconda/install.
-3. Install Microsoft's Jupyter extension. 
-4. Open a terminal at the root of the cloned repository and run `conda env create -f environment.yml`.
-5. Once the conda environment has been created, run `conda activate datacleaning`.
-6. Obtain a csv file of our data set available at  
+3. Install Microsoft's Jupyter extension.
+4. Obtain a csv file of our data set available at  
     https://www.kaggle.com/datasets/sobhanmoosavi/us-accidents/data.
-7. Put the CSV file into the root of our repository and rename it "data.csv".
-8. Run all of the code in [data-cleaning.ipynb](./data-cleaning.ipynb). You should now have a new CSV file called "clean-data.csv" that will serve as the data source for our data visualization.
-9. Run `python -m http.server` in the root of this project.
-10. Go to `localhost:8000`.
+5. Put the CSV file into the root of our repository and rename it "data.csv".
+6. Open a terminal at the root of the cloned repository and run `conda env create -f environment.yml`. If VSCode prompts you for a Python environment, click "Python Environments" followed by "datacleaning (Python 3.11.13)".
+7. Once the conda environment has been created, run `conda activate datacleaning`.
+10. Run all of the code in [data-cleaning.ipynb](./data-cleaning.ipynb). This process will take about 1.5 minutes to run, with the first cell taking over a minute to run and the other cells being nearly instantaneous. You can run a cell by hovering over it and clicking the triangle "play button" that appears on the upper left hand side of the cell. You should now have a new CSV file called "clean-data.csv" that will serve as the data source for our data visualization.
+11. Run `python -m http.server` in the root of this project.
+12. Go to `localhost:8000`.
 
 ## References Used
 
